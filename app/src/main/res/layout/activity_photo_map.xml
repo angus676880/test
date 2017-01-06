@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_photo_map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="com.example.user.mainsearch.PhotoMap">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <ImageButton
+                android:id="@+id/btnHome"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_home_black_24dp"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+
+                />
+
+            <ImageButton
+                android:id="@+id/btnKeyword"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_search_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+
+            <ImageButton
+                android:id="@+id/btnMap"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_place_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+
+            <ImageButton
+                android:id="@+id/btnSpinner"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_location_city_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_favorite_border_black_24dp2"
+                android:scaleType="centerInside"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+            <ImageButton
+                android:id="@+id/btnEver"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_person_pin_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+
+                />
+
+
+        </LinearLayout>
+
+        <fragment
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</RelativeLayout>

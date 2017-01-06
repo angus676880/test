@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">全國運動場館搜尋</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="longitude_label"/>
+    <string name="latitude_label"/>
+
+
+</resources>

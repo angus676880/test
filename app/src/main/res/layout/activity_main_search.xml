@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"  >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <ImageButton
+                android:id="@+id/btnHome"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_home_black_24dp"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+
+                />
+
+            <ImageButton
+                android:id="@+id/btnKeyword"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_search_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+
+            <ImageButton
+                android:id="@+id/btnMap"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_place_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+
+            <ImageButton
+                android:id="@+id/btnSpinner"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_location_city_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_favorite_border_black_24dp2"
+                android:scaleType="centerInside"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+                />
+            <ImageButton
+                android:id="@+id/btnEver"
+                android:layout_width="wrap_content"
+                android:layout_weight="1.00"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_person_pin_black_24dp2"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:background="#3366cc"
+
+                />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:text="關鍵字搜尋"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/textView20"
+                android:textSize="20sp"
+                android:textStyle="normal|bold"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="請輸入關鍵字:"
+                    android:textColor="#A0522D"
+                    android:layout_width="118dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView14"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchText"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/searchBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="#1E88E5"
+                android:text="查詢"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
