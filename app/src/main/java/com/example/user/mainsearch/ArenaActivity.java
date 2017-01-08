@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -70,11 +69,11 @@ public class ArenaActivity extends Activity {
     char[] urlChar;
     ArrayList<HashMap<String, String>> oslist = new ArrayList();
     private static final String TAG_OS = "value";
-    private static final String TAG_count = "Name";
-    private static final String TAG_area = "Address";
+    private static final String TAG_COUNT = "Name";
+    private static final String TAG_AREA = "Address";
     private static final String TAG_ID = "GymID";
     private static final String TAG_PHOTO = "Photo1";
-    private static final String TAG_LatLng = "LatLng";
+    private static final String TAG_LATLNG = "LatLng";
     ArrayList<HashMap<String, String>> gymstarlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_SCORE = "AVG(score)";
@@ -86,18 +85,14 @@ public class ArenaActivity extends Activity {
     String url3;
     //連資料庫
     SQLiteDatabase db= null;
-    Cursor cursor;  //和TABLE溝通
     //SQL語法
     String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
     List<Map<String, Object>> list = new ArrayList();
-    List<Map<String, Object>> starlist = new ArrayList();
     public ArrayList GYMIDArr = new ArrayList();
     public ArrayList titleArr = new ArrayList();
     public ArrayList LatLngArr = new ArrayList();
-    public String titleA[]= new String[100];
-    public int countNum = 0;
     public ArrayList subtitleArr = new ArrayList();
     public ArrayList image = new ArrayList();
     public ArrayList gymstarArr = new ArrayList();
@@ -179,33 +174,12 @@ public class ArenaActivity extends Activity {
         JSONParse jsonparse = new JSONParse();
         jsonparse.execute();
 
-
-
         //建立資料庫，若存在則開啟資料庫
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
         db.execSQL(CREATE_TABLE); //建立資料表
-
-        //db.execSQL("INSERT INTO table02 (loc,date,time,oth) values ('台北','2016/7/23','1:41 AM','喔噎')");  //新增資料
-
     }
 
     //將需要的資料塞到 List 裡面
-
-
-
-    private List<Map<String,Object>> getData() {
-        List<Map<String, Object>> list2 = new ArrayList();
-        for(int i=0;i<titleArr.size();i++) {
-            HashMap<String,Object> item = new HashMap();
-            item.put("GYMID", GYMIDArr.get(i));
-            item.put("title", titleArr.get(i));
-            item.put("subtitle", subtitleArr.get(i));
-            item.put("image", image.get(i));
-            list2.add(item);
-        }
-        return list2;
-    }
-
 
     private List<Map<String,Object>> getData2() {
         List<Map<String, Object>> list2 = new ArrayList();
@@ -477,30 +451,30 @@ public class ArenaActivity extends Activity {
                     JSONObject c = value.getJSONObject(i);
 
                     // Storing  JSON item in a Variable
-                    String ecountiesString = c.getString(TAG_count);
-                    String areaString = c.getString(TAG_area);
+                    String ecountiesString = c.getString(TAG_COUNT);
+                    String areaString = c.getString(TAG_AREA);
                     String imageurl = c.getString(TAG_PHOTO);
                     gymId = c.getString(TAG_ID);
-                    String LatLng = c.getString(TAG_LatLng);
+                    String LatLng = c.getString(TAG_LATLNG);
 
                     // Adding value HashMap key => value
 
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_count, ecountiesString);
-                    map.put(TAG_area, areaString);
+                    map.put(TAG_COUNT, ecountiesString);
+                    map.put(TAG_AREA, areaString);
                     map.put(TAG_PHOTO, imageurl);
                     map.put(TAG_ID,gymId);
-                    map.put(TAG_LatLng,LatLng);
+                    map.put(TAG_LATLNG,LatLng);
 
 
                     oslist.add(map);
 
                     GYMIDArr.add(oslist.get(i).get(TAG_ID));
-                    titleArr.add(oslist.get(i).get(TAG_count));
-                    subtitleArr.add(oslist.get(i).get(TAG_area));
+                    titleArr.add(oslist.get(i).get(TAG_COUNT));
+                    subtitleArr.add(oslist.get(i).get(TAG_AREA));
                     image.add(oslist.get(i).get(TAG_PHOTO));
-                    LatLngArr.add(oslist.get(i).get(TAG_LatLng));
+                    LatLngArr.add(oslist.get(i).get(TAG_LATLNG));
 
                 }
 
@@ -520,7 +494,6 @@ public class ArenaActivity extends Activity {
     }
     private class JSONParse2 extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
-        String gymId;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -554,7 +527,7 @@ public class ArenaActivity extends Activity {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is2, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
