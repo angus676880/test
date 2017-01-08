@@ -44,8 +44,8 @@ public class CaloriesActivity extends Activity {
 
 
         String[] titles = new String[] {"單位：大卡"}; // 定義折線的名稱
-        List<Integer> x = new ArrayList<Integer>(); // 點的x坐標
-        List<Double> y = new ArrayList<Double>(); // 點的y坐標
+        List<Integer> x = new ArrayList(); // 點的x坐標
+        List<Double> y = new ArrayList(); // 點的y坐標
 
 
         if (cursor.getCount()>0){    // 若有資料
@@ -129,8 +129,8 @@ public class CaloriesActivity extends Activity {
     // 資料處理
     private XYMultipleSeriesDataset buildDatset(String[] titles, List<Integer> xValues,
                                                 List<Double> yValues) {
-        List<Integer> xV = new ArrayList<Integer>(); // 點的x坐標
-        List<Double> yV = new ArrayList<Double>(); // 點的y坐標
+        List<Integer> xV = new ArrayList(); // 點的x坐標
+        List<Double> yV = new ArrayList(); // 點的y坐標
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
         int length = titles.length; // 折線數量
@@ -145,7 +145,6 @@ public class CaloriesActivity extends Activity {
 
             for (int k = 0; k < seriesLength; k++) // 每條線裡有幾個點
             {
-                //series.add(xV[k], yV[k]);
                 series.add(xV.get(k),yV.get(k));
             }
             dataset.addSeries(series);

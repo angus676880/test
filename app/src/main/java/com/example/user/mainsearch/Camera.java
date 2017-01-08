@@ -52,8 +52,7 @@ public class Camera extends Activity {
     //宣告
     private ImageView mImg;
     private DisplayMetrics mPhone;
-    private final static int CAMERA = 66 ;
-    private final static int PHOTO = 99 ;
+    private final static int cam = 66 ;
     private Uri file;
     public Uri uri;
     EditText etCusCom;
@@ -63,7 +62,7 @@ public class Camera extends Activity {
     char[] urlChar;
     String encodeResult="";
     public String temp;
-    String Comments,gymid,CusComments,LatLng,Name,Start,End,Total,Month,Day,Year,photourl;
+    String Comments,gymid,CusComments,LatLng,Name,Start,End,Total,Month,Day,Year,photo_url2;
     String url;
     FTPClient ftpClient;
     String CREATE_TABLE = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
@@ -98,7 +97,7 @@ public class Camera extends Activity {
         Month = intent.getStringExtra("Month");
         Day = intent.getStringExtra("Day");
         Year = intent.getStringExtra("Year");
-        photourl = intent.getStringExtra("PhotoUrl");
+        photo_url2 = intent.getStringExtra("PhotoUrl");
 
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
@@ -113,7 +112,7 @@ public class Camera extends Activity {
             }
         });
 
-        urlChar = photourl.toCharArray();
+        urlChar = photo_url2.toCharArray();
         encodeResult="";
         for(int i = 0; i <urlChar.length; i++) {
             temp = String.valueOf(urlChar[i]);
@@ -138,10 +137,6 @@ public class Camera extends Activity {
             {
                 //開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因
                 //為點選相片後返回程式呼叫onActivityResult
-                /*Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, PHOTO);*/
 
                 // 建立 "選擇檔案 Action" 的 Intent
                 Intent intent = new Intent(Intent.ACTION_PICK);
@@ -163,6 +158,7 @@ public class Camera extends Activity {
 
                 new Thread(new Runnable()
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -175,6 +171,7 @@ public class Camera extends Activity {
                         }
                         catch(Exception e)
                         {
+                            throw new RuntimeException(e);
                         }
                     }
                 }).start();
@@ -197,7 +194,7 @@ public class Camera extends Activity {
             }
         }
         //藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
-        if ((requestCode == CAMERA || resultCode == RESULT_OK ) && data != null)
+        if ((requestCode == cam || resultCode == RESULT_OK ) && data != null)
         {
             //取得照片路徑uri
             uri = data.getData() ;
@@ -216,6 +213,7 @@ public class Camera extends Activity {
             }
             catch (FileNotFoundException e)
             {
+                throw new RuntimeException(e);
             }
         }
 
@@ -225,7 +223,7 @@ public class Camera extends Activity {
     private void ScalePic(Bitmap bitmap, int phone)
     {
         //縮放比例預設為1
-        float mScale = 1 ;
+        float mScale ;
 
         //如果圖片寬度大於手機寬度則進行縮放，否則直接將圖片放入ImageView內
         if(bitmap.getWidth() > phone )
@@ -292,13 +290,8 @@ public class Camera extends Activity {
             Log.e("file", name);
             cursor.close();
             String uuid = UUID.randomUUID().toString();
-            System.out.println("uuid = " + uuid);
             //檔案名稱
             String filename = name.substring(name.lastIndexOf("/") + 1, name.length()).toLowerCase() + uuid;
-
-            //取得副檔名
-            String end = uri.toString().substring(uri.toString().lastIndexOf(".") + 1, uri.toString().length()).toLowerCase();
-            //System.out.println("副檔名"+end);
 
             final String FTP_HOST = "fs.mis.kuas.edu.tw";
             final String FTP_USER = "s1102137127";
@@ -312,13 +305,10 @@ public class Camera extends Activity {
                 ftpClient.setControlEncoding("UTF-8");
 
                 //連接FTP
-                try {
-                    ftpClient.connect(InetAddress.getByName(FTP_HOST));
-                } catch (UnknownHostException ex) {
+                try {ftpClient.connect(InetAddress.getByName(FTP_HOST));}
+                catch (UnknownHostException ex) {
                     throw new IOException("不能找到FTP服務:" + InetAddress.getByName(FTP_HOST) + "'");
                 }
-
-                //ftpClient.connect(InetAddress.getByName(FTP_HOST));
 
                 //在?接???查??.
                 int reply = ftpClient.getReplyCode();
@@ -330,25 +320,11 @@ public class Camera extends Activity {
 
                 //登陸
                 if (!ftpClient.login(FTP_USER, FTP_PASS)) {
-                    is_connected = false;
                     ftpClient.disconnect();
                     throw new IOException("不能登入到FTP伺服器:'" + InetAddress.getByName(FTP_HOST) + "'");
-                } else {
-                    is_connected = true;
                 }
-                System.out.println("ftp連接成功 result=" + is_connected);
             } catch (IOException e) {
-                System.out.println("連接ftp器出賜福錯：" + e.getMessage());
-                is_connected = false;
-
-            }
-            System.out.println("結果:" + is_connected);
-
-            try {
-                System.out.println("TEST資料夾" + ftpClient.changeWorkingDirectory("www/test"));
-            } catch (Exception e) {
-                e.printStackTrace();
-
+                throw new RuntimeException(e);
             }
 
             try {
@@ -356,19 +332,9 @@ public class Camera extends Activity {
 
                 ftpClient.changeWorkingDirectory("www/");
 
-                System.out.println("檔案名:" + filename);
                 //創建server端資料夾
 
                 ftpClient.makeDirectory("www/test/");//restaurantId
-
-           /* boolean flag = ftpClient.makeDirectory(filename);
-            if (flag) {
-                System.out.println("新建文件 " + filename + " 成功！");
-            } else {
-                System.out.println("建文件 " + filename + " 失敗！");
-
-            }*/
-
 
                 //設定檔案類型
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -379,26 +345,16 @@ public class Camera extends Activity {
                 //開啟資料流
                 BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(name));//路徑
                 //上傳檔案間重新命名
-                //System.out.println("OUTT:"+"/gymupload/"+filename);
-
                 try {
                     ftpClient.changeWorkingDirectory("/");
                     boolean ftpupload = ftpClient.storeFile("www/test/" + filename, buffIn);
                     //            ftpClient.storeFile("/gymupload/"+restaurantId+"/"+restaurantId+"."+menuId+filename.substring(filename.lastIndexOf("."),filename.length()), buffIn);
 
                     if (ftpupload) {
-                        // Log.i(e, "ftp上?成功！");
-                        System.out.println("ftp上傳成功");
                         Toast.makeText(this, "回報圖片上傳成功!!", Toast.LENGTH_LONG).show();
-
-                    } else {
-                        // Log.i(SyncStateContract.Constants.LOG_TAG, "ftp上?失?!");
-                        System.out.println("ftp上傳失敗");
-
                     }
-
                 } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage());
+                    throw new RuntimeException(e);
                 }
 
                 buffIn.close();
@@ -406,22 +362,19 @@ public class Camera extends Activity {
                 ftpClient.disconnect();
 
             } catch (Exception e) {
-                // Toast.makeText(AddMenu.this, "Error:"+e, Toast.LENGTH_SHORT).show();
-                Log.e("ERROR", e.getMessage());
+                throw new RuntimeException(e);
             }
             PhotoUrl = "http://fs.mis.kuas.edu.tw/~s1102137127/test/"+filename;
         }else {
-            PhotoUrl = photourl;
+            PhotoUrl = photo_url2;
         }
 
-        //cursor2 = create("0",filename);
         cursor2 = create(Name,Start,End,Total,Month,Day,Year,LatLng,PhotoUrl);
-
     }
 
 
     public long create(String Name, String Start, String End, String total2, String Month ,
-                       String Day, String Year, String LatLng,String photourl) {
+                       String Day, String Year, String LatLng,String photo_url2) {
         ContentValues args = new ContentValues();
         args.put("Name", Name);
         args.put("Start", Start);
@@ -431,7 +384,7 @@ public class Camera extends Activity {
         args.put("Day", Day);
         args.put("Year", Year);
         args.put("LatLng", LatLng);
-        args.put("PhotoUrl", photourl);
+        args.put("PhotoUrl", photo_url2);
 
 
         return db.insert("EverListFinal", null, args);

@@ -7,12 +7,9 @@ package com.example.user.mainsearch;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,7 +19,6 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,15 +47,14 @@ public class DetailActivity extends Activity {
     TextView nameText, addressText, phoneText, desText, parkText;
     ListView lvComment;
     ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
-    ArrayList<HashMap<String, String>> comlist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> comlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_GYMID = "gymid";
     private static final String TAG_SCORE = "score";
     private static final String TAG_COMMENT = "comment";
-    private static final String TAG_NICKNAME = "nickname";
-    public InputStream is = null;
-    public JSONObject jObj = null;
-    public String json = "";
+    public InputStream is ;
+    public JSONObject jObj ;
+    public String json ;
     private static final String TAG_OS = "value";
     private static final String TAG_count = "Name";
     private static final String TAG_area = "Address";
@@ -145,7 +139,6 @@ public class DetailActivity extends Activity {
                 startActivity(intent);
             }
         });
-        //Toast.makeText(DetailActivity.this, gymId, Toast.LENGTH_LONG).show();
         url = "http://iplay.sa.gov.tw/odata/Gym(" + gymId + ")?$format=application/json;odata.metadata=none";
         url2 = "http://52.198.27.85/overmove/SelectOne/"+gymId;
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
@@ -193,30 +186,30 @@ public class DetailActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj;
         }
@@ -266,36 +259,6 @@ public class DetailActivity extends Activity {
                             startActivity(phoneIntent);
                         }
                     });
-                    // Adding value HashMap key => value
-
-//                    HashMap<String, String> map = new HashMap<String, String>();
-//
-//                    map.put(TAG_count, ecountiesString);
-//                    map.put(TAG_area, areaString);
-//
-//                    oslist.add(map);
-//                    list=(ListView)findViewById(R.id.listView);
-//
-//                    ListAdapter adapter = new SimpleAdapter(Main2Activity.this, oslist,
-//                            R.layout.list_data,
-//                            new String[] {TAG_count,TAG_area}, new int[] {
-//                            R.id.vers,R.id.name});
-//
-//                    list.setAdapter(adapter);
-//                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view,
-//                                                int position, long id) {
-//                            Intent intent =new Intent();
-//                            intent.setClass(Main2Activity.this, Main3Activity.class);
-//                            intent.putExtra("GymId", gymId);
-//                            startActivity(intent);
-//                            //finish();
-//                            //Toast.makeText(Main2Activity.this, "You Clicked at "+oslist.get(+position).get("ecounties"), Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    });
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -304,21 +267,8 @@ public class DetailActivity extends Activity {
         }
     }
 
-    private Drawable loadImageFromURL(String url) {
-
-        InputStream is = null;
-        try {
-            is = (InputStream) new URL(url).getContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Drawable draw = Drawable.createFromStream(is, "src");
-        return draw;
-
-    }
     private class JSONParse2 extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
-        String gymId;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -327,7 +277,6 @@ public class DetailActivity extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
-
         }
 
         @Override
@@ -341,30 +290,30 @@ public class DetailActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj;
         }
@@ -376,8 +325,6 @@ public class DetailActivity extends Activity {
                 // Getting JSON Array from URL
                 value = json.getJSONArray(TAG_COM);
 
-                //skipValue = new JSONObject(String.valueOf(json)).getString("@odata.nextLink");
-
                 for(int i = 0; i < value.length(); i++){
                     JSONObject c = value.getJSONObject(i);
 
@@ -388,29 +335,19 @@ public class DetailActivity extends Activity {
 
                     // Adding value HashMap key => value
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_GYMID, GymidString);
                     map.put(TAG_SCORE, ScoreString);
                     map.put(TAG_COMMENT, CommentString);
 
                     comlist.add(map);
-
-                    //titleA[countNum]=oslist.get(i).get(TAG_count);
-                    //countNum=countNum+1;
                 }
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            /*ListAdapter adapter = new SimpleAdapter(
-                    Main3Activity.this, comlist,
-                    R.layout.list_comment, new String[]{TAG_SCORE,TAG_COMMENT,TAG_NICKNAME}, new int[]{R.id
-                    .rbComment,
-                    R.id.tvComment,R.id.tvNickname});
-
-            lvComment.setAdapter(adapter);*/
             ListAdapter adapter = new SimpleAdapter(
                     DetailActivity.this, comlist,
                     R.layout.list_comment, new String[] { TAG_SCORE, TAG_COMMENT},
@@ -433,7 +370,6 @@ public class DetailActivity extends Activity {
             return false;
         }
     }
-
 }
 
 
