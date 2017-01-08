@@ -358,7 +358,9 @@ public class Camera extends Activity {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }finally {
+                    if(buffIn != null){
                     buffIn.close();
+                    }
                 }
 
                 ftpClient.logout();
