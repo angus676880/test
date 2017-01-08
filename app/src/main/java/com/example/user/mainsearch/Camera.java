@@ -342,10 +342,12 @@ public class Camera extends Activity {
                 ftpClient.enterLocalPassiveMode();
 
 
-                //開啟資料流
-                BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(name));//路徑
+                BufferedInputStream buffIn = null;
                 //上傳檔案間重新命名
                 try {
+                    //開啟資料流
+                    buffIn = new BufferedInputStream(new FileInputStream(name));//路徑
+
                     ftpClient.changeWorkingDirectory("/");
                     boolean ftpupload = ftpClient.storeFile("www/test/" + filename, buffIn);
                     //            ftpClient.storeFile("/gymupload/"+restaurantId+"/"+restaurantId+"."+menuId+filename.substring(filename.lastIndexOf("."),filename.length()), buffIn);
@@ -355,9 +357,10 @@ public class Camera extends Activity {
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
+                }finally {
+                    buffIn.close();
                 }
 
-                buffIn.close();
                 ftpClient.logout();
                 ftpClient.disconnect();
 
