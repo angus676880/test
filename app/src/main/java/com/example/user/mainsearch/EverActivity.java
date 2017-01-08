@@ -1,7 +1,6 @@
 package com.example.user.mainsearch;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,19 +16,23 @@ import android.widget.Spinner;
 
 public class EverActivity extends Activity {
 
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ListView lvEver;
-    com.gc.materialdesign.views.Button btnDelEver,btnCheck;
-    Spinner sp4,sp5;
+    com.gc.materialdesign.views.Button btnDelEver;
+    com.gc.materialdesign.views.Button btnCheck;
+    Spinner sp4;
+    Spinner sp5;
 
     private ArrayAdapter<String> monthList;
-    private Context mContext;
     private String[] month = {"一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"};
     private String Month;
     String SelectMonth;
-
     private ArrayAdapter<String> YearList;
-    private Context mContext2;
     private String[] year = {"2016","2017","2018","2019","2020"};
     private String SelectYear;
 
@@ -56,7 +59,6 @@ public class EverActivity extends Activity {
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
         db.execSQL(CREATE_TABLE); //建立資料表
-        //create(FinishLoc,FinishDate,FinishTime,FinishOth,FinishSpo);
         cursor = getAll(); //查詢所有資料
         UpdataAdapter(cursor);  //載入資料表至listview
 
@@ -118,16 +120,14 @@ public class EverActivity extends Activity {
             }
         });
 
-        mContext = this.getApplicationContext();
         sp4 = (Spinner)findViewById(R.id.spinner4);
-        monthList = new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt, month);
+        monthList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, month);
         sp4.setAdapter(monthList);
         sp4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                //Toast.makeText(mContext, "你選的是"+month[position], Toast.LENGTH_SHORT).show();
-                Month = month[position].toString();
+                Month = month[position];
                 switch (Month)
                 {
                     case "一月":
@@ -176,20 +176,18 @@ public class EverActivity extends Activity {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
-        mContext2 = this.getApplicationContext();
         sp5 = (Spinner)findViewById(R.id.spinner5);
-        YearList = new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt, year);
+        YearList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, year);
         sp5.setAdapter(YearList);
         sp5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                //Toast.makeText(mContext2, "你選的是"+year[position], Toast.LENGTH_SHORT).show();
                 SelectYear = year[position].toString();
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
+                //沒選擇資料
             }
         });
 

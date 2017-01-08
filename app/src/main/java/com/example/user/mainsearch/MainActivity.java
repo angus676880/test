@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,21 +40,25 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
 
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ListView lv3;
     public InputStream is = null;
     public JSONObject jObj = null;
     public String json = "";
-    ArrayList<HashMap<String, String>> toplist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> toplist = new ArrayList();
     private static final String TAG_top = "data";
     private static final String TAG_gymid = "gymid";
-    ArrayList<HashMap<String, String>> infolist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> infolist = new ArrayList();
     private static final String TAG_COM = "value";
     private static final String TAG_Name = "Name";
     private static final String TAG_Address = "Address";
     private static final String TAG_Image = "Photo1";
-    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    String urlEncode;
+    List<Map<String, Object>> list = new ArrayList();
     String encodeResult="";
     char[] urlChar;
     JSONArray value = null;
@@ -63,13 +66,14 @@ public class MainActivity extends Activity {
     JSONArray value3 = null;
     JSONArray value4 = null;
     public String temp;
-    String url,url1,url2,url3;
+    String url;
+    String url1;
+    String url2;
+    String url3;
     public ArrayList gymidArr = new ArrayList();
     public ArrayList nameArr = new ArrayList();
     public ArrayList addressArr = new ArrayList();
     public ArrayList imageArr = new ArrayList();
-    int count = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,9 +153,9 @@ public class MainActivity extends Activity {
 
     }
     private List<Map<String,Object>> getData() {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> list2 = new ArrayList();
         for(int i=0;i<gymidArr.size();i++) {
-            HashMap<String,Object> item = new HashMap<String,Object>();
+            HashMap<String,Object> item = new HashMap();
             item.put("nameArr", nameArr.get(i));
             item.put("addressArr", addressArr.get(i));
             item.put("gymidArr", gymidArr.get(i));
@@ -160,15 +164,6 @@ public class MainActivity extends Activity {
         }
         return list2;
     }
-    /*public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
-        String gymId = toplist.get(arg2).get(TAG_gymid);
-        Intent intent =new Intent();
-        intent.setClass(MainActivity.this, DetailActivity.class);
-        intent.putExtra("GymId", gymId);
-        startActivity(intent);
-    }*/
-
     public final class MyView {
         public TextView tvHomeName;
         public TextView tvHomeAddress;
@@ -182,26 +177,21 @@ public class MainActivity extends Activity {
         }
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
-
             //回傳這個 List 有幾個 item
             return list.size();
 
         }
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return null;
         }
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return 0;
         }
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            MyView myviews = null;
+            MyView myviews ;
             myviews = new MyView();
             convertView = inflater.inflate(R.layout.list_home, null);
             myviews.tvHomeName = (TextView) convertView.findViewById(R.id.tvHomeName);
@@ -210,7 +200,6 @@ public class MainActivity extends Activity {
             myviews.iv = (ImageView) convertView.findViewById(R.id.imageView2);
             convertView.setClickable(true);
             convertView.setFocusable(true);
-            //urlEncode = (String) list.get(position).get("image");
             urlChar = ((String) list.get(position).get("imageArr")).toCharArray();
             encodeResult="";
             for(int i = 0; i <urlChar.length; i++) {
@@ -220,7 +209,7 @@ public class MainActivity extends Activity {
                     try {
                         temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
                     if(urlChar[i]==32)temp="%20";
                 }
@@ -230,38 +219,6 @@ public class MainActivity extends Activity {
             myviews.tvHomeAddress.setText((String) list.get(position).get("addressArr"));
             myviews.tvHomeID.setText((String) list.get(position).get("gymidArr"));
             new DownloadImageTask(myviews.iv).execute(encodeResult);
-            /*myviews.bt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(MainActivity.this, titleArr[position], Toast.LENGTH_SHORT).show();
-                    String tt = titleArr.get(position).toString();
-                    String stt = subtitleArr.get(position).toString();
-                    String gymidtt = GYMIDArr.get(position).toString();
-                    Toast.makeText(ArenaActivity.this, "已成功加入我的運動清單", Toast.LENGTH_SHORT).show();
-                    create(gymidtt,tt,stt);
-                    url3 = "http://52.198.27.85/overmove/Hot/"+gymidtt;
-                    new Thread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            try
-                            {
-//API串接的uri路徑 (小黑人目前範例先取用YouTube API)
-                                String uri = url3;
-                                HttpClient mHttpClient = new DefaultHttpClient();
-                                HttpGet mHttpGet = new HttpGet(uri);
-                                mHttpClient.execute(mHttpGet);
-                            }
-                            catch(Exception e)
-                            {
-                            }
-                        }
-                    }).tart();
-
-                    Intent intent = new Intent(ArenaActivity.this, FavoriteActivity.class);
-                    startActivity(intent);
-                }
-            });*/
             convertView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -286,7 +243,6 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
         }
 
@@ -298,8 +254,7 @@ public class MainActivity extends Activity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return mIcon11;
         }
@@ -312,7 +267,6 @@ public class MainActivity extends Activity {
     }
     private class JSONParse extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
-        String gymId;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -321,44 +275,41 @@ public class MainActivity extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
-
         }
 
         @Override
         protected JSONObject doInBackground(String... args) {
             try {
-                // defaultHttpClient
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(url);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
-
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj;
         }
@@ -375,27 +326,21 @@ public class MainActivity extends Activity {
                     // Storing  JSON item in a Variable
                     String gymidString = c.getString(TAG_gymid);
                     // Adding value HashMap key => value
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_gymid, gymidString);
 
                     toplist.add(map);
 
-                    //titleA[countNum]=oslist.get(i).get(TAG_count);
-                    //countNum=countNum+1;
                     gymidArr.add(toplist.get(i).get(TAG_gymid));
-
                 }
-
-
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             url1 = "http://iplay.sa.gov.tw/odata/Gym(" + gymidArr.get(0) + ")?$format=application/json;odata.metadata=none";
             url2 = "http://iplay.sa.gov.tw/odata/Gym(" + gymidArr.get(1) + ")?$format=application/json;odata.metadata=none";
             url3 = "http://iplay.sa.gov.tw/odata/Gym(" + gymidArr.get(2) + ")?$format=application/json;odata.metadata=none";
             new GetJSONTask().execute();
-
         }
     }
     class GetJSONTask extends AsyncTask<String, Void, JSONObject[]> {
@@ -429,7 +374,7 @@ public class MainActivity extends Activity {
                     String addressString = c.getString(TAG_Address);
                     String imageString = c.getString(TAG_Image);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_Name, nameString);
                     map.put(TAG_Address, addressString);
@@ -444,7 +389,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             try {
                 // Getting JSON Array from URL
@@ -457,7 +402,7 @@ public class MainActivity extends Activity {
                     String addressString = c.getString(TAG_Address);
                     String imageString = c.getString(TAG_Image);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_Name, nameString);
                     map.put(TAG_Address, addressString);
@@ -472,7 +417,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             try {
                 // Getting JSON Array from URL
@@ -485,7 +430,7 @@ public class MainActivity extends Activity {
                     String addressString = c.getString(TAG_Address);
                     String imageString = c.getString(TAG_Image);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_Name, nameString);
                     map.put(TAG_Address, addressString);
@@ -500,7 +445,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             list = getData();
             MyAdapter adapter = new MyAdapter(MainActivity.this);

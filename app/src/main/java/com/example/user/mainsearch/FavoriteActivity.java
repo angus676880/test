@@ -16,7 +16,12 @@ import android.widget.SimpleCursorAdapter;
 
 public class FavoriteActivity extends Activity {
 
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ListView listView2;
     com.gc.materialdesign.views.Button btnDel;
     private long myid = 1;
@@ -42,7 +47,6 @@ public class FavoriteActivity extends Activity {
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
         db.execSQL(CREATE_TABLE); //建立資料表
-        //db.execSQL("INSERT INTO table02 (loc,date,time,oth) values ('台北','2016/7/23','1:41 AM','喔噎')");  //新增資料
         cursor = getAll(); //查詢所有資料
         UpdataAdapter(cursor);  //載入資料表至listview
         listView2.setOnItemClickListener(new ListClickHandler());
@@ -119,14 +123,11 @@ public class FavoriteActivity extends Activity {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
-            // TODO Auto-generated method stub
-            //Integer pos = position+1;
             myid = arg3;
             String a = String.valueOf(myid);
             Intent intent = new Intent(FavoriteActivity.this, StartActivity.class);
             intent.putExtra("selected-item", a);
             startActivity(intent);
-
         }
 
     }

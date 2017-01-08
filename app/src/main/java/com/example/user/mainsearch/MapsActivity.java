@@ -4,7 +4,6 @@ package com.example.user.mainsearch;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.net.Uri;
@@ -60,29 +59,27 @@ public class MapsActivity extends AppCompatActivity implements
 
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
-    String url3;
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
-    public double LAT[]= new double[10000] ;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     public  ArrayList LATList = new ArrayList();
     public  ArrayList LNGList = new ArrayList();
     public  ArrayList NAMEList = new ArrayList();
     public  ArrayList ADDRESSList = new ArrayList();
     public  ArrayList PHOTOList = new ArrayList();
     public  ArrayList GYMIDList = new ArrayList();
-    public double LNG[]= new double[10000] ;
-    public String NAME[]= new String[10000];
-    public String ADDRESS[]= new String[10000];
     private Spinner spinner;
     public String nextLink;
     public int countlatlng=0,runTime=0,countmarker=0;
-    public boolean checkApi=false,flag=true;
-    private GoogleMap mMap;
+    public boolean flag=true;
     private ArrayAdapter<String> lunchList;
     public String[] lunch = {"5", "10", "20", "30"};
     public double selectNum,oldnum=0;
     public String photoUrl="";
     SQLiteDatabase db= null;
-    Cursor cursor;  //和TABLE溝通
     //SQL語法
     String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
@@ -177,7 +174,7 @@ public class MapsActivity extends AppCompatActivity implements
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
         spinner = (Spinner)findViewById(R.id.mySpinner);
-        lunchList = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_spinner_item,
+        lunchList = new ArrayAdapter(MapsActivity.this, android.R.layout.simple_spinner_item,
                 lunch);
         spinner.setAdapter(lunchList);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -191,6 +188,7 @@ public class MapsActivity extends AppCompatActivity implements
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
+                //??????
             }
         });
 
@@ -212,10 +210,6 @@ public class MapsActivity extends AppCompatActivity implements
 
         //建立多執行緒進行網路Server API串接的資料傳輸與讀取
         gps = new GPSTracker(this);
-        final double latitude = gps.getLatitude();
-        final double longitude = gps.getLongitude();
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -257,28 +251,11 @@ public class MapsActivity extends AppCompatActivity implements
                             String mJsonText = EntityUtils.toString(mHttpResponse
                                     .getEntity());
                             //將json格式解開並取出名稱
-                            String value = new JSONObject(mJsonText).getString("value");
 
                             for (int i = 0; i < 10; i++) {
-                                //  NAME[countlatlng] = new JSONArray(new JSONObject(mJsonText)
-                                //         .getString("value"))
-                                //         .getJSONObject(i).getString("Name");
 
-
-                                //     ADDRESS[countlatlng]  = new JSONArray(new JSONObject
-                                // (mJsonText)
-                                //             .getString
-                                //             ("value"))
-                                //             .getJSONObject(i).getString("Address");
-                                String Photo1 = new JSONArray(new JSONObject(mJsonText)
-                                        .getString("value"))
-                                        .getJSONObject(i).getString("Photo1");
                                 String LatLng = new JSONArray(new JSONObject(mJsonText).getString("value"))
                                         .getJSONObject(i).getString("LatLng");
-                                String OperationName = new JSONArray(new JSONObject(mJsonText).getString("value"))
-                                        .getJSONObject(i).getString("OperationName");
-                                String OperationTel = new JSONArray(new JSONObject(mJsonText).getString("value"))
-                                        .getJSONObject(i).getString("OperationTel");
 
                                 String[] LatLng2 = LatLng.split(" ");
                                 char[] a = LatLng2[0].toCharArray();
@@ -325,8 +302,6 @@ public class MapsActivity extends AppCompatActivity implements
 
                                 LATList.add(lat);
                                 LNGList.add(lng);
-                                //LAT[countlatlng] = lat;
-                                //LNG[countlatlng] = lng;
                                 countlatlng = countlatlng + 1;
                             }
 
@@ -336,6 +311,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                     } while (nextLink != "" && nextLink != null);
                 } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -343,11 +319,6 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     public void setUpMap(double x, double y, Object title, Object snippet) {
-
-
-        // 刪除原來預設的內容
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-
 
         // 建立位置的座標物件
         LatLng place = new LatLng(x, y);
@@ -362,8 +333,6 @@ public class MapsActivity extends AppCompatActivity implements
         markerOptions.position(place)
                 .title((String) title)
                 .snippet((String) snippet);
-
-        //mGoogleMap.addMarker(markerOptions);
 
         CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(MapsActivity.this);
         mGoogleMap.setInfoWindowAdapter(adapter);
@@ -394,13 +363,6 @@ public class MapsActivity extends AppCompatActivity implements
                 .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mGoogleMap.setMyLocationEnabled(true);
@@ -437,13 +399,6 @@ public class MapsActivity extends AppCompatActivity implements
                 .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -463,11 +418,7 @@ public class MapsActivity extends AppCompatActivity implements
         mLocationRequest.setInterval(1000); //5 seconds
         mLocationRequest.setFastestInterval(1000); //3 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
-
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-
     }
 
     @Override
@@ -494,21 +445,7 @@ public class MapsActivity extends AppCompatActivity implements
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocation = mGoogleMap.addMarker(markerOptions);
 
-        //  Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
         gps = new GPSTracker(this);
-        if(gps.canGetLocation()){
-
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-
-            // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude +
-            //        "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-
-        }else{
-            Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
-        }
-        //If you only need one location, unregister the listener
-        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
         if(countlatlng>countmarker) {
             for (int i =countmarker; i < countlatlng; i++) {
@@ -528,13 +465,9 @@ public class MapsActivity extends AppCompatActivity implements
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Maps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
+                Action.TYPE_VIEW,
+                "Maps Page",
                 Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
                 Uri.parse("android-app://com.example.user.mainsearch/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
@@ -547,13 +480,9 @@ public class MapsActivity extends AppCompatActivity implements
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Maps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
+                Action.TYPE_VIEW,
+                "Maps Page",
                 Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
                 Uri.parse("android-app://com.example.user.mainsearch/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
@@ -604,8 +533,6 @@ public class MapsActivity extends AppCompatActivity implements
                 not_first_time_showing_info_window=true;
                 Picasso.with(MapsActivity.this).load(encodeResult).into(imageUrl,new InfoWindowRefresher(marker));
             }
-
-            //new ImageDownloader(imageUrl).execute(encodeResult);
             return view;
         }
 

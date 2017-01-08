@@ -1,7 +1,6 @@
 package com.example.user.mainsearch;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -26,14 +25,17 @@ public class MainSearch extends Activity {
 
     private EditText searchText;
     com.gc.materialdesign.views.Button searchBtn;
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
-    MyAdapter adapter = null;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     Spinner spinner;
 
     public ArrayList nameArr = new ArrayList();
 
     private ArrayAdapter<String> countiesList;
-    private Context mContext;
     private String[] counties = {"臺北市","高雄市","基隆市","新北市","桃園市","新竹縣","新竹市","苗栗縣",
             "臺中市","彰化縣","南投縣","雲林縣","嘉義縣","嘉義市","臺南市","屏東縣",
             "宜蘭縣","花蓮縣","臺東縣","澎湖縣","金門縣","連江縣"};
@@ -112,10 +114,9 @@ public class MainSearch extends Activity {
         searchText = (EditText) findViewById(R.id.searchText);
         searchBtn= (com.gc.materialdesign.views.Button) findViewById(R.id.searchBtn);
 
-        mContext = this.getApplicationContext();
         spinner = (Spinner)findViewById(R.id.spinner);
 
-        countiesList = new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt, counties);
+        countiesList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, counties);
         spinner.setAdapter(countiesList);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -178,7 +179,7 @@ public class MainSearch extends Activity {
                         finish();
 
                 } catch (Exception e) {
-                                    Toast.makeText(MainSearch.this, "查無資料", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainSearch.this, "查無資料", Toast.LENGTH_SHORT).show();
                     Log.e("log_tag", e.toString());
                 }
             }
@@ -189,12 +190,11 @@ public class MainSearch extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 countiesSelect = counties[position].toString();
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+            //??????
             }
         });
 

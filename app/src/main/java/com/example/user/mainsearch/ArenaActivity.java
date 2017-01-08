@@ -51,14 +51,16 @@ import java.util.Map;
 public class ArenaActivity extends Activity {
 
     //傳API解JSON
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ListView lvArena;
     String ecounties;
     String area;
-    String GymKind;
-    String urlEncode;
     String encodeResult="";
-    String GYMID;
     public InputStream is;
     public JSONObject jObj;
     public String json ;
