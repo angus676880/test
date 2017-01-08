@@ -73,11 +73,13 @@ public class MapsActivity extends AppCompatActivity implements
     public  ArrayList GYMIDList = new ArrayList();
     private Spinner spinner;
     public String nextLink;
-    public int countlatlng=0,runTime=0,countmarker=0;
+    public int countlatlng=0;
+    public int countmarker=0;
     public boolean flag=true;
     private ArrayAdapter<String> lunchList;
     public String[] lunch = {"5", "10", "20", "30"};
-    public double selectNum,oldnum=0;
+    public int selectNum;
+    public int oldnum=0;
     public String photoUrl="";
     SQLiteDatabase db= null;
     //SQL語法
@@ -182,7 +184,7 @@ public class MapsActivity extends AppCompatActivity implements
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 //Toast.makeText(mContext, "你選的是"+lunch[position], Toast.LENGTH_SHORT).show();
-                selectNum = Double.valueOf(lunch[position].trim()).doubleValue();
+                selectNum = Integer.parseInt(lunch[position].trim());
 
                 flag=false;
             }

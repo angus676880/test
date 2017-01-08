@@ -282,7 +282,9 @@ public class SearchSpinner extends Activity {
                 while ((line = reader.readLine()) != null) {
                     result+=line;
                 }
+                if(is != null){
                 is.close();
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }
