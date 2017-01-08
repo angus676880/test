@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,22 +59,21 @@ public class ArenaActivity extends Activity {
     String urlEncode;
     String encodeResult="";
     String GYMID;
-    public InputStream is = null;
-    public JSONObject jObj = null;
-    public String json = "";
-    public InputStream is2 = null;
-    public JSONObject jObj2 = null;
-    public String json2 = "";
+    public InputStream is;
+    public JSONObject jObj;
+    public String json ;
+    public InputStream is2 ;
+    public JSONObject jObj2 ;
+    public String json2 ;
     char[] urlChar;
-    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> oslist = new ArrayList();
     private static final String TAG_OS = "value";
-    private static final String TAG_Skip = "@odata.nextLink";
     private static final String TAG_count = "Name";
     private static final String TAG_area = "Address";
     private static final String TAG_ID = "GymID";
     private static final String TAG_PHOTO = "Photo1";
     private static final String TAG_LatLng = "LatLng";
-    ArrayList<HashMap<String, String>> gymstarlist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> gymstarlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_SCORE = "AVG(score)";
     JSONArray value = null;
@@ -88,10 +86,9 @@ public class ArenaActivity extends Activity {
     //SQL語法
     String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
-    private Bitmap bitmap;
-    public String temp;
-    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    List<Map<String, Object>> starlist = new ArrayList<Map<String, Object>>();
+
+    List<Map<String, Object>> list = new ArrayList();
+    List<Map<String, Object>> starlist = new ArrayList();
     public ArrayList GYMIDArr = new ArrayList();
     public ArrayList titleArr = new ArrayList();
     public ArrayList LatLngArr = new ArrayList();
@@ -112,7 +109,7 @@ public class ArenaActivity extends Activity {
         btnSpinner = (ImageButton)findViewById(R.id.btnSpinner);
         btnFavorite = (ImageButton)findViewById(R.id.btnFavorite);
         btnEver = (ImageButton)findViewById(R.id.btnEver);
-        oslist = new ArrayList<HashMap<String, String>>();
+        oslist = new ArrayList();
         Intent intent = this.getIntent();
         ecounties = intent.getStringExtra("ecounties");
         area = intent.getStringExtra("area");
@@ -175,7 +172,6 @@ public class ArenaActivity extends Activity {
         });
 
         url = "http://iplay.sa.gov.tw/odata/GymSearch?$format=application/json;odata.metadata=none&City="+ecounties+"&Country="+area;
-        //url2 = "http://52.198.27.85/overmove/AvgScore/2381";
         JSONParse jsonparse = new JSONParse();
         jsonparse.execute();
 
@@ -194,9 +190,9 @@ public class ArenaActivity extends Activity {
 
 
     private List<Map<String,Object>> getData() {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> list2 = new ArrayList();
         for(int i=0;i<titleArr.size();i++) {
-            HashMap<String,Object> item = new HashMap<String,Object>();
+            HashMap<String,Object> item = new HashMap();
             item.put("GYMID", GYMIDArr.get(i));
             item.put("title", titleArr.get(i));
             item.put("subtitle", subtitleArr.get(i));
@@ -208,9 +204,9 @@ public class ArenaActivity extends Activity {
 
 
     private List<Map<String,Object>> getData2() {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> list2 = new ArrayList();
         for(int i=0;i<titleArr.size();i++) {
-            HashMap<String,Object> item = new HashMap<String,Object>();
+            HashMap<String,Object> item = new HashMap();
             item.put("GYMID", GYMIDArr.get(i));
             item.put("title", titleArr.get(i));
             item.put("subtitle", subtitleArr.get(i));
@@ -222,14 +218,6 @@ public class ArenaActivity extends Activity {
     }
 
     // ListView 的 item click
-    /*public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
-        String gymId = oslist.get(arg2).get(TAG_ID);
-        Intent intent =new Intent();
-        intent.setClass(ArenaActivity.this, DetailActivity.class);
-        intent.putExtra("GymId", gymId);
-        startActivity(intent);
-    }*/
 
     public final class MyView {
         public TextView title;
@@ -266,7 +254,7 @@ public class ArenaActivity extends Activity {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        MyView myviews = null;
+        MyView myviews ;
         myviews = new MyView();
         convertView = inflater.inflate(R.layout.list_data, null);
         myviews.title = (TextView) convertView.findViewById(R.id.textView1);
@@ -276,17 +264,17 @@ public class ArenaActivity extends Activity {
         myviews.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
         convertView.setClickable(true);
         convertView.setFocusable(true);
-        //urlEncode = (String) list.get(position).get("image");
         urlChar = ((String) list.get(position).get("image")).toCharArray();
         encodeResult="";
+        String temp;
         for(int i = 0; i <urlChar.length; i++) {
             temp = String.valueOf(urlChar[i]);
             if( urlChar[i]<33 ||  urlChar[i]>126)
             {
                 try {
                     temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 if(urlChar[i]==32)temp="%20";
             }
@@ -318,7 +306,6 @@ public class ArenaActivity extends Activity {
         myviews.bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(MainActivity.this, titleArr[position], Toast.LENGTH_SHORT).show();
                 String tt = titleArr.get(position).toString();
                 String stt = subtitleArr.get(position).toString();
                 String gymidtt = GYMIDArr.get(position).toString();
@@ -329,6 +316,7 @@ public class ArenaActivity extends Activity {
                 url3 = "http://52.198.27.85/overmove/Hot/"+gymidtt;
                 new Thread(new Runnable()
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -341,6 +329,7 @@ public class ArenaActivity extends Activity {
                         }
                         catch(Exception e)
                         {
+                            throw new RuntimeException(e);
                         }
                     }
                 }).start();
@@ -361,21 +350,6 @@ public class ArenaActivity extends Activity {
         return db.insert("FavoriteListFinal", null, args);
     }
 
-    /*public Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
-
     //顯示圖片
     class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
@@ -392,14 +366,13 @@ public class ArenaActivity extends Activity {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap mIcon11 ;
             try {
 
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return mIcon11;
         }
@@ -435,30 +408,30 @@ public class ArenaActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj;
         }
@@ -493,7 +466,7 @@ public class ArenaActivity extends Activity {
 
                 }
                 catch(JSONException e) {
-
+                    throw new RuntimeException(e);
                 };
 
                 for(int i = 0; i < value.length(); i++){
@@ -508,7 +481,7 @@ public class ArenaActivity extends Activity {
 
                     // Adding value HashMap key => value
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_count, ecountiesString);
                     map.put(TAG_area, areaString);
@@ -519,8 +492,6 @@ public class ArenaActivity extends Activity {
 
                     oslist.add(map);
 
-                    //titleA[countNum]=oslist.get(i).get(TAG_count);
-                    //countNum=countNum+1;
                     GYMIDArr.add(oslist.get(i).get(TAG_ID));
                     titleArr.add(oslist.get(i).get(TAG_count));
                     subtitleArr.add(oslist.get(i).get(TAG_area));
@@ -531,7 +502,7 @@ public class ArenaActivity extends Activity {
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             url2 = "http://52.198.27.85/overmove/AvgScore/";
             for(int i = 0; i < GYMIDArr.size() ; i++)
@@ -568,11 +539,11 @@ public class ArenaActivity extends Activity {
                 is2 = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
@@ -586,12 +557,12 @@ public class ArenaActivity extends Activity {
                 is2.close();
                 json2 = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj2 = new JSONObject(json2);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj2;
         }
@@ -608,7 +579,7 @@ public class ArenaActivity extends Activity {
                     // Storing  JSON item in a Variable
                     String starString = c.getString(TAG_SCORE);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_SCORE, starString);
 
@@ -621,7 +592,7 @@ public class ArenaActivity extends Activity {
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             list = getData2();
             MyAdapter adapter = new MyAdapter(ArenaActivity.this);
