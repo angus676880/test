@@ -37,7 +37,7 @@ public class StartActivity extends Activity {
     public String year;
     public int shh,smm,ehh,emm;
     public int cal;
-    public double totalcal;
+    public int totalcal;
 
     private ArrayAdapter<String> sportList;
     private Context mContext;
