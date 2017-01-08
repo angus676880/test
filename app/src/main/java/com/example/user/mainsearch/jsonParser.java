@@ -1,7 +1,5 @@
 package com.example.user.mainsearch;
 
-import android.util.Log;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -34,9 +32,6 @@ public class jsonParser {
 
     public JSONObject getJSONFromUrl(String url) {
 
-        //System.out.println("url getJSONfromUrl " + url);
-        //url = "http://api.worldbank.org/countries/CA/indicators/SP.POP.TOTL?date=1980:1981&format=json";
-
         // Making HTTP request
         try {
             // defaultHttpClient
@@ -48,18 +43,18 @@ public class jsonParser {
             is = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "iso-8859-1"), 8);
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line ;
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
@@ -67,14 +62,14 @@ public class jsonParser {
             json = sb.toString();
             System.out.println("JSONParser string: " + json);
         } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            throw new RuntimeException(e);
         }
 
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+            throw new RuntimeException(e);
         }
 
 
@@ -84,22 +79,12 @@ public class jsonParser {
                 jObj = new JSONObject();
                 jObj.put("data", new JSONArray(json));
             } catch (JSONException e) {
-                Log.d("JSON Parser", "Error parsing JSONArray " + e.toString());
+                throw new RuntimeException(e);
             }
             return jObj;
         }
 
-        // try parse the string to a JSON object
-    /*try {
-        jObj = new JSONObject(json);
-    } catch (JSONException e) {
-        Log.e("JSON Parser", "Error parsing data " + e.toString());
-    }*/
-
         // return JSON String
         return jObj;
-
-
-
     }
 }

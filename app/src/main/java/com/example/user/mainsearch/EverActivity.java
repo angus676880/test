@@ -243,15 +243,4 @@ public class EverActivity extends Activity {
 
         return cursor;
     }
-
-    public void dropTable () {
-        db.execSQL("DROP TABLE EverListFinal");
-        db.close();
-    }
-
-    public void refresh(){
-
-        onCreate(null);
-
-    }
 }

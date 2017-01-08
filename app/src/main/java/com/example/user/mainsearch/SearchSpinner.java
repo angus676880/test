@@ -37,15 +37,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchSpinner extends Activity {
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     com.gc.materialdesign.views.Button searchButton;
     ArrayList<String> listItems=new ArrayList<>();
     ArrayList<String> listItems2=new ArrayList<>();
     ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapter2;
-    Spinner sp,sp2;
+    Spinner sp;
+    Spinner sp2;
     HttpURLConnection urlConnection = null;
-    HttpURLConnection urlConnection2 = null;
     String ecounties;
     BufferedReader in = null;
     String aa;
@@ -57,8 +62,8 @@ public class SearchSpinner extends Activity {
         setContentView(R.layout.activity_search_spinner);
         sp=(Spinner)findViewById(R.id.spinner);
         sp2=(Spinner)findViewById(R.id.spinner2);
-        adapter=new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt,listItems);
-        adapter2=new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt,listItems2);
+        adapter=new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt,listItems);
+        adapter2=new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt,listItems2);
         searchButton= (com.gc.materialdesign.views.Button) findViewById(R.id.searchButton);
         btnHome = (ImageButton)findViewById(R.id.btnHome);
         btnKeyword = (ImageButton)findViewById(R.id.btnKeyword);
@@ -231,7 +236,7 @@ public class SearchSpinner extends Activity {
         sp2.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                //???
             }
 
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
@@ -242,20 +247,14 @@ public class SearchSpinner extends Activity {
                 } else {
                     noarea = false;
                 }
-
             }
         });
-
-
-        //程式剛啟始時載入第一個下拉選單
-
     }
 
     public void onStart(){
         super.onStart();
         BackTask bt=new BackTask();
         bt.execute();
-
     }
     private class BackTask extends AsyncTask<Void,Void,Void> {
         ArrayList<String> list;
@@ -279,12 +278,11 @@ public class SearchSpinner extends Activity {
             //convert response to string
             try{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     result+=line;
                 }
                 is.close();
-                //result=sb.toString();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -309,12 +307,6 @@ public class SearchSpinner extends Activity {
         }
     }
 
-    /*private Void sendPostDataToInternet(String ecounties) {
-
-
-
-        return null;
-    }*/
     private class select extends AsyncTask<Void,Void,Void> {
 
         ArrayList<String> list2;
@@ -327,31 +319,24 @@ public class SearchSpinner extends Activity {
 
             HttpPost myPost = new HttpPost("http://fs.mis.kuas.edu.tw/~s1102137119/area.php");
             try {
-                List<NameValuePair> params2 = new ArrayList<NameValuePair>();
+                List<NameValuePair> params2 = new ArrayList();
                 params2.add(new BasicNameValuePair("ecounties",ecounties));
                 myPost.setEntity(new UrlEncodedFormEntity(params2, HTTP.UTF_8));
                 HttpResponse response = new DefaultHttpClient().execute(myPost);
                 in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                //HttpEntity entity = response.getEntity();
-                //is2 = entity.getContent();
-
-
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             String result="";
 
             //convert response to string
             try{
-                //BufferedReader reader = new BufferedReader(new InputStreamReader(is2,"utf-8"));
                 String line = "";
                 while ((line = in.readLine()) != null) {
                     result+=line;
                 }
-                //is2.close();
-                //result=sb.toString();
             }catch(Exception e){
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             // parse json data
             try{
@@ -363,17 +348,15 @@ public class SearchSpinner extends Activity {
                 }
             }
             catch(JSONException e){
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return null;
         }
 
         protected void onPostExecute(Void result){
-            //sp2.setAdapter(null);
             listItems2.clear();
             listItems2.addAll(list2);
             adapter2.notifyDataSetChanged();
-
         }
     }
 }

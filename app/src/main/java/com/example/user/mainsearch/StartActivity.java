@@ -28,8 +28,13 @@ public class StartActivity extends Activity {
     String gymid,LatLng,PhotoUrl;
     com.gc.materialdesign.views.Button btnStart,btnEnd,btnFinish,btnDel;
     Spinner sp3;
-    String url;
-    public String sh,sm,eh,em,month,day,year;
+    public String sh;
+    public String sm;
+    public String eh;
+    public String em;
+    public String month;
+    public String day;
+    public String year;
     public int shh,smm,ehh,emm;
     public int cal;
     public double totalcal;
@@ -69,15 +74,14 @@ public class StartActivity extends Activity {
         mContext = this.getApplicationContext();
         sp3 = (Spinner)findViewById(R.id.spinner3);
 
-        sportList = new ArrayAdapter<String>(this,R.layout.spinner_layout,R.id.txt, sport);
+        sportList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, sport);
         sp3.setAdapter(sportList);
 
         sp3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                //Toast.makeText(mContext, "你選的是"+sport[position], Toast.LENGTH_SHORT).show();
-                Sport = sport[position].toString();
+                Sport = sport[position];
                 switch (Sport)
                 {
                     case "健走":
@@ -125,7 +129,6 @@ public class StartActivity extends Activity {
             }
         });
 
-        //operation();
         //將場館名稱傳進來
         Intent intent = getIntent();
         ansid = intent.getStringExtra("selected-item");
@@ -142,26 +145,15 @@ public class StartActivity extends Activity {
         LatLng = cursor.getString(cursor.getColumnIndex("LatLng"));
         PhotoUrl = cursor.getString(cursor.getColumnIndex("PhotoUrl"));
 
-        //url = "http://52.198.27.85/overmove/InsertOne/"+ansid+"&"+CusComments+"&"+Comments;
-
-        //顯示時間
-        /*String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-
-        time.setText(currentDateTimeString);*/
-
         btnFinish.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-
-
                 AlertDialog.Builder dialog = new AlertDialog.Builder(StartActivity.this);
                 dialog.setTitle("前往評論");
                 dialog.setMessage("請問您是否要前往評論");
                 dialog.setNegativeButton("No,完成運動",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
                         String Name = title.getText().toString();
                         String Start = tvStart.getText().toString();
                         String End = tvEnd.getText().toString();
@@ -180,7 +172,6 @@ public class StartActivity extends Activity {
                 dialog.setPositiveButton("Yes,我要評論",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
                         String Name = title.getText().toString();
                         String Start = tvStart.getText().toString();
                         String End = tvEnd.getText().toString();
@@ -207,14 +198,6 @@ public class StartActivity extends Activity {
                     }
 
                 });
-                /*dialog.setNeutralButton("取消",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(MainActivity.this, "取消",Toast.LENGTH_SHORT).show();
-                    }
-
-                });*/
                 dialog.show();
             }
         });
@@ -261,7 +244,6 @@ public class StartActivity extends Activity {
         handler.removeCallbacks(updateTimer);//設定定時要執行的方法
         handler.postDelayed(updateTimer, 500);//設定Delay的時間
     }
-
 
     //固定要執行的方法
     private Runnable updateTimer = new Runnable() {

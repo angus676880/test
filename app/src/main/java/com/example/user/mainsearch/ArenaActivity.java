@@ -81,7 +81,9 @@ public class ArenaActivity extends Activity {
     JSONArray value = null;
     JSONArray value2 = null;
     String skipValue = null;
-    String url,url2,url3;
+    String url;
+    String url2;
+    String url3;
     //連資料庫
     SQLiteDatabase db= null;
     Cursor cursor;  //和TABLE溝通
