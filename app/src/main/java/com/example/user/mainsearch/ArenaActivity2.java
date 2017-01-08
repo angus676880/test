@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -56,49 +55,38 @@ public class ArenaActivity2 extends Activity {
     //傳API解JSON
     ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
     ListView lvArena2;
-    String urlEncode;
     String encodeResult="";
-    String GYMID;
     int CountCode=0,CountSec=0;
     public InputStream is = null;
-    public JSONObject jObj = null;
-    public String json = "";
     public InputStream is2 = null;
     public JSONObject jObj2 = null;
     public String json2 = "";
     char[] urlChar;
-    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> oslist = new ArrayList();
     private static final String TAG_OS = "value";
-    private static final String TAG_Skip = "@odata.nextLink";
     private static final String TAG_count = "Name";
     private static final String TAG_area = "Address";
     private static final String TAG_ID = "GymID";
     private static final String TAG_PHOTO = "Photo1";
     private static final String TAG_LatLng = "LatLng";
-    ArrayList<HashMap<String, String>> gymstarlist = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> gymstarlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_SCORE = "AVG(score)";
     JSONArray value = null;
     JSONArray value2 = null;
-    String skipValue = null;
     String url,url2,url3;
     //連資料庫
     SQLiteDatabase db= null;
-    Cursor cursor;  //和TABLE溝通
     //SQL語法
     String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
-    private Bitmap bitmap;
     public String temp;
-    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    List<Map<String, Object>> starlist = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> list = new ArrayList();
     public ArrayList intentArr = new ArrayList();
     public ArrayList urlArr = new ArrayList();
     public ArrayList GYMIDArr = new ArrayList();
     public ArrayList titleArr = new ArrayList();
     public ArrayList LatLngArr = new ArrayList();
-    public String titleA[]= new String[100];
-    public int countNum = 0;
     public ArrayList subtitleArr = new ArrayList();
     public ArrayList image = new ArrayList();
     public ArrayList gymstarArr = new ArrayList();
@@ -113,8 +101,7 @@ public class ArenaActivity2 extends Activity {
         btnSpinner = (ImageButton)findViewById(R.id.btnSpinner);
         btnFavorite = (ImageButton)findViewById(R.id.btnFavorite);
         btnEver = (ImageButton)findViewById(R.id.btnEver);
-        oslist = new ArrayList<HashMap<String, String>>();
-        Intent intent = this.getIntent();
+        oslist = new ArrayList();
         intentArr = (ArrayList) getIntent().getSerializableExtra("nameArr");
         btnHome.setOnClickListener (new Button.OnClickListener(){
 
@@ -181,13 +168,9 @@ public class ArenaActivity2 extends Activity {
 
         new GetJSONTask().execute();
 
-
-
         //建立資料庫，若存在則開啟資料庫
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
         db.execSQL(CREATE_TABLE); //建立資料表
-
-        //db.execSQL("INSERT INTO table02 (loc,date,time,oth) values ('台北','2016/7/23','1:41 AM','喔噎')");  //新增資料
 
     }
 
@@ -195,9 +178,9 @@ public class ArenaActivity2 extends Activity {
 
 
     private List<Map<String,Object>> getData2() {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> list2 = new ArrayList();
         for(int i=0;i<gymstarArr.size();i++) {
-            HashMap<String,Object> item = new HashMap<String,Object>();
+            HashMap<String,Object> item = new HashMap();
             item.put("GYMID", GYMIDArr.get(i));
             item.put("title", titleArr.get(i));
             item.put("subtitle", subtitleArr.get(i));
@@ -207,16 +190,6 @@ public class ArenaActivity2 extends Activity {
         }
         return list2;
     }
-
-    // ListView 的 item click
-    /*public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
-        String gymId = oslist.get(arg2).get(TAG_ID);
-        Intent intent =new Intent();
-        intent.setClass(ArenaActivity2.this, DetailActivity.class);
-        intent.putExtra("GymId", gymId);
-        startActivity(intent);
-    }*/
 
     public final class MyView {
         public TextView title;
@@ -253,7 +226,7 @@ public class ArenaActivity2 extends Activity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
-            MyView myviews = null;
+            MyView myviews ;
             myviews = new MyView();
             convertView = inflater.inflate(R.layout.list_data, null);
             myviews.title = (TextView) convertView.findViewById(R.id.textView1);
@@ -263,7 +236,6 @@ public class ArenaActivity2 extends Activity {
             myviews.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
             convertView.setClickable(true);
             convertView.setFocusable(true);
-            //urlEncode = (String) list.get(position).get("image");
             urlChar = ((String) list.get(position).get("image")).toCharArray();
             encodeResult="";
             for(int i = 0; i <urlChar.length; i++) {
@@ -305,7 +277,6 @@ public class ArenaActivity2 extends Activity {
             myviews.bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(MainActivity.this, titleArr[position], Toast.LENGTH_SHORT).show();
                     String tt = titleArr.get(position).toString();
                     String stt = subtitleArr.get(position).toString();
                     String gymidtt = GYMIDArr.get(position).toString();
@@ -328,6 +299,7 @@ public class ArenaActivity2 extends Activity {
                             }
                             catch(Exception e)
                             {
+                                throw new RuntimeException(e);
                             }
                         }
                     }).start();
@@ -345,24 +317,8 @@ public class ArenaActivity2 extends Activity {
         args.put("LatLng", LatLng);
         args.put("PhotoUrl", PhotoUrl);
 
-
         return db.insert("FavoriteListFinal", null, args);
     }
-
-    /*public Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 
     //顯示圖片
     class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -380,14 +336,13 @@ public class ArenaActivity2 extends Activity {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap mIcon11;
             try {
 
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return mIcon11;
         }
@@ -466,7 +421,7 @@ public class ArenaActivity2 extends Activity {
 
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
 
             }
@@ -484,7 +439,6 @@ public class ArenaActivity2 extends Activity {
     }
     private class JSONParse2 extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
-        String gymId;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -493,7 +447,6 @@ public class ArenaActivity2 extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
-
         }
 
         @Override
@@ -507,30 +460,30 @@ public class ArenaActivity2 extends Activity {
                 is2 = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is2, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
                 is2.close();
                 json2 = sb.toString();
             } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
+                throw new RuntimeException(e);
             }
             try {
                 jObj2 = new JSONObject(json2);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             return jObj2;
         }
@@ -547,7 +500,7 @@ public class ArenaActivity2 extends Activity {
                     // Storing  JSON item in a Variable
                     String starString = c.getString(TAG_SCORE);
 
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap();
 
                     map.put(TAG_SCORE, starString);
 
@@ -563,12 +516,9 @@ public class ArenaActivity2 extends Activity {
                         MyAdapter adapter = new MyAdapter(ArenaActivity2.this);
                         lvArena2.setAdapter(adapter);
                     }
-
                 }
-
-
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
         }
