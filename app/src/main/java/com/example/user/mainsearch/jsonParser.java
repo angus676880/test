@@ -21,9 +21,9 @@ import java.io.UnsupportedEncodingException;
 
 public class jsonParser {
 
-    public static InputStream is ;
-    public static JSONObject jObj = null;
-    public  static String json = "";
+    private static InputStream is ;
+    private static JSONObject jObj = null;
+    private static String json = "";
 
     // constructor
     public jsonParser() {
