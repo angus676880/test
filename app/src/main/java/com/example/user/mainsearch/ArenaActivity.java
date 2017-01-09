@@ -60,12 +60,12 @@ public class ArenaActivity extends Activity {
     String ecounties;
     String area;
     String encodeResult="";
-    private static final InputStream is;
-    private static final JSONObject jObj;
-    private static final String json ;
-    private static final InputStream is2 ;
-    private static final JSONObject jObj2 ;
-    private static final String json2 ;
+    InputStream is;
+    JSONObject jObj;
+    String json ;
+    InputStream is2 ;
+    JSONObject jObj2 ;
+    String json2 ;
     char[] urlChar;
     ArrayList<HashMap<String, String>> oslist = new ArrayList();
     private static final String TAG_OS = "value";
