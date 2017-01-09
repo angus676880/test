@@ -36,10 +36,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
-import java.net.UnknownHostException;
 import java.util.UUID;
 
 import static com.example.user.mainsearch.R.id.img;
@@ -175,9 +173,9 @@ public class Camera extends Activity {
                         try
                         {
 //API串接的uri路徑 (小黑人目前範例先取用YouTube API)
-                            String uri = url;
+                            String newUri = url;
                             HttpClient mHttpClient = new DefaultHttpClient();
-                            HttpGet mHttpGet = new HttpGet(uri);
+                            HttpGet mHttpGet = new HttpGet(newUri);
                             mHttpClient.execute(mHttpGet);
                         }
                         catch(Exception e)
@@ -280,13 +278,13 @@ public class Camera extends Activity {
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
 
             //真實路徑
-            String name = cursor.getString(idx);
+            String newName = cursor.getString(idx);
 
-            Log.e("file", name);
+            Log.e("file", newName);
             cursor.close();
             String uuid = UUID.randomUUID().toString();
             //檔案名稱
-            String filename = name.substring(name.lastIndexOf("/") + 1, name.length()).toLowerCase() + uuid;
+            String filename = newName.substring(newName.lastIndexOf("/") + 1, newName.length()).toLowerCase() + uuid;
 
             final String ftpHost = "fs.mis.kuas.edu.tw";
             final String ftpUser = "s1102137127";
@@ -339,7 +337,7 @@ public class Camera extends Activity {
                 //上傳檔案間重新命名
                 try {
                     //開啟資料流
-                    buffIn = new BufferedInputStream(new FileInputStream(name));//路徑
+                    buffIn = new BufferedInputStream(new FileInputStream(newName));//路徑
 
                     ftpClient.changeWorkingDirectory("/");
                     boolean ftpupload = ftpClient.storeFile("www/test/" + filename, buffIn);
