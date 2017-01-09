@@ -20,11 +20,12 @@ import java.util.List;
 
 public class CaloriesActivity extends Activity {
 
-    String SelectMonth,SelectYear;
+    String selectMonth;
+    String selectYear;
     SQLiteDatabase db= null;
     Cursor cursor;  //和TABLE溝通
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
+    String createTabel = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
             "autoincrement,Name TEXT,Start TEXT,End TEXT,Total TEXT,Month TEXT,Day TEXT,Year " +
             "TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
@@ -34,11 +35,11 @@ public class CaloriesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calories);
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTabel); //建立資料表
 
         Intent intent = this.getIntent();
-        SelectMonth = intent.getStringExtra("SelectMonth");
-        SelectYear = intent.getStringExtra("SelectYear");
+        selectMonth = intent.getStringExtra("SelectMonth");
+        selectYear = intent.getStringExtra("SelectYear");
 
         cursor = getans();
 
@@ -79,10 +80,10 @@ public class CaloriesActivity extends Activity {
     public Cursor getans(){
         //設定查詢id
         //查詢指令
-        String[] Selectdate = {SelectMonth,SelectYear};
+        String[] selectDate = {selectMonth,selectYear};
 
         cursor = db.rawQuery("SELECT * FROM EverListFinal WHERE Month = ? AND Year = ?",
-                Selectdate);
+                selectDate);
 
 
         return cursor;

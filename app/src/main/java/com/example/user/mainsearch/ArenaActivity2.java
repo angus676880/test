@@ -53,43 +53,51 @@ import java.util.TimerTask;
 public class ArenaActivity2 extends Activity {
 
     //傳API解JSON
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ListView lvArena2;
     String encodeResult="";
-    int CountCode=0,CountSec=0;
-    public InputStream is = null;
-    public InputStream is2 = null;
-    public JSONObject jObj2 = null;
-    public String json2 = "";
+    int countCode=0;
+    int countSec=0;
+    InputStream is = null;
+    InputStream is2 = null;
+    JSONObject jObj2 = null;
+    String json2 = "";
     char[] urlChar;
     ArrayList<HashMap<String, String>> oslist = new ArrayList();
     private static final String TAG_OS = "value";
-    private static final String TAG_count = "Name";
-    private static final String TAG_area = "Address";
+    private static final String TAG_COUNT = "Name";
+    private static final String TAG_AREA = "Address";
     private static final String TAG_ID = "GymID";
     private static final String TAG_PHOTO = "Photo1";
-    private static final String TAG_LatLng = "LatLng";
+    private static final String TAG_LATLNG = "LatLng";
     ArrayList<HashMap<String, String>> gymstarlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_SCORE = "AVG(score)";
     JSONArray value = null;
     JSONArray value2 = null;
-    String url,url2,url3;
+    String url;
+    String url2;
+    String url3;
     //連資料庫
     SQLiteDatabase db= null;
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
+    String createTable = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
-    public String temp;
+    String temp;
     List<Map<String, Object>> list = new ArrayList();
-    public ArrayList intentArr = new ArrayList();
-    public ArrayList urlArr = new ArrayList();
-    public ArrayList GYMIDArr = new ArrayList();
-    public ArrayList titleArr = new ArrayList();
-    public ArrayList LatLngArr = new ArrayList();
-    public ArrayList subtitleArr = new ArrayList();
-    public ArrayList image = new ArrayList();
-    public ArrayList gymstarArr = new ArrayList();
+    ArrayList intentArr = new ArrayList();
+    ArrayList urlArr = new ArrayList();
+    ArrayList gymIDArr = new ArrayList();
+    ArrayList titleArr = new ArrayList();
+    ArrayList latLngArr = new ArrayList();
+    ArrayList subtitleArr = new ArrayList();
+    ArrayList image = new ArrayList();
+    ArrayList gymstarArr = new ArrayList();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,33 +178,17 @@ public class ArenaActivity2 extends Activity {
 
         //建立資料庫，若存在則開啟資料庫
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
 
     }
 
-    //將需要的資料塞到 List 裡面
-
-
-    private List<Map<String,Object>> getData2() {
-        List<Map<String, Object>> list2 = new ArrayList();
-        for(int i=0;i<gymstarArr.size();i++) {
-            HashMap<String,Object> item = new HashMap();
-            item.put("GYMID", GYMIDArr.get(i));
-            item.put("title", titleArr.get(i));
-            item.put("subtitle", subtitleArr.get(i));
-            item.put("image", image.get(i));
-            item.put("GymStar", gymstarArr.get(i));
-            list2.add(item);
-        }
-        return list2;
-    }
 
     public final class MyView {
-        public TextView title;
-        public TextView subtitle;
-        public com.gc.materialdesign.views.Button bt;
-        public ImageView iv;
-        public RatingBar ratingBar;
+        TextView title;
+        TextView subtitle;
+        com.gc.materialdesign.views.Button bt;
+        ImageView iv;
+        RatingBar ratingBar;
     }
 
     // 實作一個 Adapter 繼承 BaseAdapter
@@ -207,25 +199,20 @@ public class ArenaActivity2 extends Activity {
         }
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
-
             //回傳這個 List 有幾個 item
             return list.size();
 
         }
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return null;
         }
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return 0;
         }
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
             MyView myviews ;
             myviews = new MyView();
             convertView = inflater.inflate(R.layout.list_data, null);
@@ -247,7 +234,10 @@ public class ArenaActivity2 extends Activity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    if(urlChar[i]==32)temp="%20";
+                    if(urlChar[i]==32)
+                    {
+                        temp="%20";
+                    }
                 }
                 encodeResult=encodeResult + temp;
             }
@@ -279,14 +269,15 @@ public class ArenaActivity2 extends Activity {
                 public void onClick(View v) {
                     String tt = titleArr.get(position).toString();
                     String stt = subtitleArr.get(position).toString();
-                    String gymidtt = GYMIDArr.get(position).toString();
-                    String LatLng = LatLngArr.get(position).toString();
-                    String PhotoUrl = image.get(position).toString();
+                    String gymidtt = gymIDArr.get(position).toString();
+                    String latLng = latLngArr.get(position).toString();
+                    String photoUrl = image.get(position).toString();
                     Toast.makeText(ArenaActivity2.this, "已成功加入收藏場館清單", Toast.LENGTH_SHORT).show();
-                    create(gymidtt,tt,stt,LatLng,PhotoUrl);
+                    create(gymidtt,tt,stt,latLng,photoUrl);
                     url3 = "http://52.198.27.85/overmove/Hot/"+gymidtt;
                     new Thread(new Runnable()
                     {
+                        @Override
                         public void run()
                         {
                             try
@@ -309,13 +300,13 @@ public class ArenaActivity2 extends Activity {
         }
     }
     
-    public long create(String gymidtt, String tt, String stt,String LatLng,String PhotoUrl) {
+    public long create(String gymidtt, String tt, String stt,String latLng,String photoUrl) {
         ContentValues args = new ContentValues();
         args.put("gymID", gymidtt);
         args.put("title", tt);
         args.put("subtitle", stt);
-        args.put("LatLng", LatLng);
-        args.put("PhotoUrl", PhotoUrl);
+        args.put("LatLng", latLng);
+        args.put("PhotoUrl", photoUrl);
 
         return db.insert("FavoriteListFinal", null, args);
     }
@@ -330,7 +321,6 @@ public class ArenaActivity2 extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
         }
 
@@ -394,27 +384,27 @@ public class ArenaActivity2 extends Activity {
 
                             JSONObject c = value.getJSONObject(0);
                             // Storing  JSON item in a Variable
-                            String nameString = c.getString(TAG_count);
-                            String addressString = c.getString(TAG_area);
+                            String nameString = c.getString(TAG_COUNT);
+                            String addressString = c.getString(TAG_AREA);
                             String imageString = c.getString(TAG_PHOTO);
                             String gymidString = c.getString(TAG_ID);
-                            String LatLngString = c.getString(TAG_LatLng);
+                            String latLngString = c.getString(TAG_LATLNG);
 
-                            HashMap<String, String> map = new HashMap<String, String>();
+                            HashMap<String, String> map = new HashMap();
 
-                            map.put(TAG_count, nameString);
-                            map.put(TAG_area, addressString);
+                            map.put(TAG_COUNT, nameString);
+                            map.put(TAG_AREA, addressString);
                             map.put(TAG_PHOTO, imageString);
                             map.put(TAG_ID, gymidString);
-                            map.put(TAG_LatLng, LatLngString);
+                            map.put(TAG_LATLNG, latLngString);
 
                             oslist.add(map);
 
-                            titleArr.add(oslist.get(0).get(TAG_count));
-                            subtitleArr.add(oslist.get(0).get(TAG_area));
+                            titleArr.add(oslist.get(0).get(TAG_COUNT));
+                            subtitleArr.add(oslist.get(0).get(TAG_AREA));
                             image.add(oslist.get(0).get(TAG_PHOTO));
-                            GYMIDArr.add(oslist.get(0).get(TAG_ID));
-                            LatLngArr.add(oslist.get(0).get(TAG_LatLng));
+                            gymIDArr.add(oslist.get(0).get(TAG_ID));
+                            latLngArr.add(oslist.get(0).get(TAG_LATLNG));
 
                             oslist.clear();
 
@@ -426,9 +416,9 @@ public class ArenaActivity2 extends Activity {
 
             }
             url2 = "http://52.198.27.85/overmove/AvgScore/";
-            for(int i = 0; i < GYMIDArr.size() ; i++)
+            for(int i = 0; i < gymIDArr.size() ; i++)
             {
-                url2= url2 + GYMIDArr.get(i)+"&";
+                url2= url2 + gymIDArr.get(i)+"&";
             }
             url2=url2.substring(0,url2.length()-1);
             JSONParse2 jsonparse2 = new JSONParse2();
@@ -509,10 +499,23 @@ public class ArenaActivity2 extends Activity {
 
                     gymstarArr.add(gymstarlist.get(i).get(TAG_SCORE));
 
-                    CountCode = CountCode+1;
+                    countCode = countCode+1;
 
-                    if(CountCode>CountSec) {
-                        list = getData2();
+                    if(countCode>countSec) {
+
+                        //將需要的資料塞到 List 裡面
+
+                            List<Map<String, Object>> list2 = new ArrayList();
+                            for(int j=0;j<gymstarArr.size();j++) {
+                                HashMap<String,Object> item = new HashMap();
+                                item.put("GYMID", gymIDArr.get(j));
+                                item.put("title", titleArr.get(j));
+                                item.put("subtitle", subtitleArr.get(j));
+                                item.put("image", image.get(j));
+                                item.put("GymStar", gymstarArr.get(j));
+                                list2.add(item);
+                            }
+
                         MyAdapter adapter = new MyAdapter(ArenaActivity2.this);
                         lvArena2.setAdapter(adapter);
                     }
@@ -524,8 +527,8 @@ public class ArenaActivity2 extends Activity {
         }
     }
     public void counttimer () {
-        Timer T=new Timer();
-        T.scheduleAtFixedRate(new TimerTask() {
+        Timer t=new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable()
@@ -534,7 +537,7 @@ public class ArenaActivity2 extends Activity {
                     public void run()
                     {
                         Log.i("tag", "A Kiss every 1 seconds");
-                        CountSec = CountSec+1;
+                        countSec = countSec+1;
                     }
                 });
             }

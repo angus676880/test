@@ -12,7 +12,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -33,7 +32,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,8 +40,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import static com.example.user.mainsearch.R.id.img;
@@ -52,26 +48,38 @@ public class Camera extends Activity {
     //宣告
     private ImageView mImg;
     private DisplayMetrics mPhone;
-    private final static int cam = 66 ;
+    int cam = 66 ;
     private Uri file;
-    public Uri uri;
+    Uri uri;
     EditText etCusCom;
     RatingBar rbCusCom;
-    Float CusComment;
-    String PhotoUrl;
+    Float cusComment;
+    String photoUrl;
     char[] urlChar;
     String encodeResult="";
-    public String temp;
-    String Comments,gymid,CusComments,LatLng,Name,Start,End,Total,Month,Day,Year,photo_url2;
+    String temp;
+    String comments;
+    String gymid;
+    String cusComments;
+    String latLng;
+    String name;
+    String start;
+    String end;
+    String total;
+    String month;
+    String day;
+    String year;
+    String photo_url2;
     String url;
     FTPClient ftpClient;
-    String CREATE_TABLE = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
+    String createTable = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
             "autoincrement,Name TEXT,Start TEXT,End TEXT,Total TEXT,Month TEXT,Day TEXT,Year " +
             "TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
     long cursor2;  //和TABLE溝通
     SQLiteDatabase db= null;
-    com.gc.materialdesign.views.ButtonRectangle btn4,photo;
+    com.gc.materialdesign.views.ButtonRectangle btn4;
+    com.gc.materialdesign.views.ButtonRectangle photo;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -89,25 +97,25 @@ public class Camera extends Activity {
         btn4 = (ButtonRectangle) findViewById(R.id.button4);
         Intent intent = this.getIntent();
         gymid = intent.getStringExtra("gymid");
-        LatLng = intent.getStringExtra("LatLng");
-        Name = intent.getStringExtra("Name");
-        Start = intent.getStringExtra("Start");
-        End = intent.getStringExtra("End");
-        Total = intent.getStringExtra("Total");
-        Month = intent.getStringExtra("Month");
-        Day = intent.getStringExtra("Day");
-        Year = intent.getStringExtra("Year");
+        latLng = intent.getStringExtra("LatLng");
+        name = intent.getStringExtra("Name");
+        start = intent.getStringExtra("Start");
+        end = intent.getStringExtra("End");
+        total = intent.getStringExtra("Total");
+        month = intent.getStringExtra("Month");
+        day = intent.getStringExtra("Day");
+        year = intent.getStringExtra("Year");
         photo_url2 = intent.getStringExtra("PhotoUrl");
 
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
         //db.execSQL("INSERT INTO table02 (loc,date,time,oth) values ('台北','2016/7/23','1:41 AM','喔噎')");  //新增資料
         rbCusCom.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar,
                                         float rating, boolean paramBoolean) {
-                CusComment = rating;
-                CusComments = CusComment.toString();
+                cusComment = rating;
+                cusComments = cusComment.toString();
 
             }
         });
@@ -123,7 +131,10 @@ public class Camera extends Activity {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                if(urlChar[i]==32)temp="%20";
+                if(urlChar[i]==32)
+                {
+                    temp="%20";
+                }
             }
             encodeResult=encodeResult + temp;
         }
@@ -153,8 +164,8 @@ public class Camera extends Activity {
             @Override
             public void onClick(View view) {
 
-                Comments = etCusCom.getText().toString();
-                url = "http://52.198.27.85/overmove/InsertOne/"+gymid+"&"+CusComments+"&"+Comments;
+                comments = etCusCom.getText().toString();
+                url = "http://52.198.27.85/overmove/InsertOne/"+gymid+"&"+cusComments+"&"+comments;
 
                 new Thread(new Runnable()
                 {
@@ -188,10 +199,8 @@ public class Camera extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data)
     {
-        if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
-                mImg.setImageURI(file);
-            }
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            mImg.setImageURI(file);
         }
         //藉由requestCode判斷是否為開啟相機或開啟相簿而呼叫的，且data不為null
         if ((requestCode == cam || resultCode == RESULT_OK ) && data != null)
@@ -207,8 +216,10 @@ public class Camera extends Activity {
                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
 
                 //判斷照片為橫向或者為直向，並進入ScalePic判斷圖片是否要進行縮放
-                if(bitmap.getWidth()>bitmap.getHeight())ScalePic(bitmap,
-                        mPhone.heightPixels);
+                if(bitmap.getWidth()>bitmap.getHeight())
+                {
+                    ScalePic(bitmap,mPhone.heightPixels);
+                }
                 else ScalePic(bitmap,mPhone.widthPixels);
             }
             catch (FileNotFoundException e)
@@ -246,22 +257,6 @@ public class Camera extends Activity {
         else mImg.setImageBitmap(bitmap);
     }
 
-    private static File getOutputMediaFile(){
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "CameraDemo");
-
-        if (!mediaStorageDir.exists()){
-            if (!mediaStorageDir.mkdirs()){
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-    }
-
-
     private void imageUpload()
     {
         StrictMode
@@ -293,11 +288,9 @@ public class Camera extends Activity {
             //檔案名稱
             String filename = name.substring(name.lastIndexOf("/") + 1, name.length()).toLowerCase() + uuid;
 
-            final String FTP_HOST = "fs.mis.kuas.edu.tw";
-            final String FTP_USER = "s1102137127";
-            final String FTP_PASS = "H124676880";
-
-            boolean is_connected;
+            final String ftpHost = "fs.mis.kuas.edu.tw";
+            final String ftpUser = "s1102137127";
+            final String ftpPass = "H124676880";
 
             try {
                 ftpClient = new FTPClient();
@@ -305,23 +298,23 @@ public class Camera extends Activity {
                 ftpClient.setControlEncoding("UTF-8");
 
                 //連接FTP
-                try {ftpClient.connect(InetAddress.getByName(FTP_HOST));}
+                try {ftpClient.connect(InetAddress.getByName(ftpHost));}
                 catch (UnknownHostException ex) {
-                    throw new IOException("不能找到FTP服務:" + InetAddress.getByName(FTP_HOST) + "'");
+                    throw new IOException("不能找到FTP服務:" + InetAddress.getByName(ftpHost) + "'");
                 }
 
                 //在?接???查??.
                 int reply = ftpClient.getReplyCode();
                 if (!FTPReply.isPositiveCompletion(reply)) {
                     ftpClient.disconnect();
-                    throw new IOException("不能連接到伺服器':" + InetAddress.getByName(FTP_HOST) + "'");
+                    throw new IOException("不能連接到伺服器':" + InetAddress.getByName(ftpHost) + "'");
                 }
 
 
                 //登陸
-                if (!ftpClient.login(FTP_USER, FTP_PASS)) {
+                if (!ftpClient.login(ftpUser, ftpPass)) {
                     ftpClient.disconnect();
-                    throw new IOException("不能登入到FTP伺服器:'" + InetAddress.getByName(FTP_HOST) + "'");
+                    throw new IOException("不能登入到FTP伺服器:'" + InetAddress.getByName(ftpHost) + "'");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -369,26 +362,26 @@ public class Camera extends Activity {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            PhotoUrl = "http://fs.mis.kuas.edu.tw/~s1102137127/test/"+filename;
+            photoUrl = "http://fs.mis.kuas.edu.tw/~s1102137127/test/"+filename;
         }else {
-            PhotoUrl = photo_url2;
+            photoUrl = photo_url2;
         }
 
-        cursor2 = create(Name,Start,End,Total,Month,Day,Year,LatLng,PhotoUrl);
+        cursor2 = create(name,start,end,total,month,day,year,latLng,photoUrl);
     }
 
 
-    public long create(String Name, String Start, String End, String total2, String Month ,
-                       String Day, String Year, String LatLng,String photo_url2) {
+    public long create(String name, String start, String end, String total2, String month ,
+                       String day, String year, String latLng,String photo_url2) {
         ContentValues args = new ContentValues();
-        args.put("Name", Name);
-        args.put("Start", Start);
-        args.put("End", End);
+        args.put("Name", name);
+        args.put("Start", start);
+        args.put("End", end);
         args.put("total", total2);
-        args.put("Month", Month);
-        args.put("Day", Day);
-        args.put("Year", Year);
-        args.put("LatLng", LatLng);
+        args.put("Month", month);
+        args.put("Day", day);
+        args.put("Year", year);
+        args.put("LatLng", latLng);
         args.put("PhotoUrl", photo_url2);
 
 
@@ -403,7 +396,6 @@ public class Camera extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
         }
 
