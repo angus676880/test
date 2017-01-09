@@ -18,7 +18,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class DBConnector {
+class DBConnector {
+
+
     public static String executeQuery(String queryString) {
         String result = "";
 
