@@ -86,16 +86,16 @@ public class ArenaActivity extends Activity {
     //連資料庫
     SQLiteDatabase db= null;
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
+    String createTable = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
     List<Map<String, Object>> list = new ArrayList();
-    public ArrayList GYMIDArr = new ArrayList();
-    public ArrayList titleArr = new ArrayList();
-    public ArrayList LatLngArr = new ArrayList();
-    public ArrayList subtitleArr = new ArrayList();
-    public ArrayList image = new ArrayList();
-    public ArrayList gymstarArr = new ArrayList();
+    ArrayList GYMIDArr = new ArrayList();
+    ArrayList titleArr = new ArrayList();
+    ArrayList LatLngArr = new ArrayList();
+    ArrayList subtitleArr = new ArrayList();
+    ArrayList image = new ArrayList();
+    ArrayList gymstarArr = new ArrayList();
     com.gc.materialdesign.views.ButtonRectangle btnNextPage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +176,7 @@ public class ArenaActivity extends Activity {
 
         //建立資料庫，若存在則開啟資料庫
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
     }
 
     //將需要的資料塞到 List 裡面
