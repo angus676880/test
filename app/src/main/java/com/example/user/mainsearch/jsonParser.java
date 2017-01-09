@@ -52,7 +52,7 @@ public class jsonParser {
                 sb.append(line + "\n");
             }
             is.close();
-            json = sb.toString(); 
+            json = sb.toString();
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
