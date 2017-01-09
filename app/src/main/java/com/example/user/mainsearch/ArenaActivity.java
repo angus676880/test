@@ -90,9 +90,9 @@ public class ArenaActivity extends Activity {
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
     List<Map<String, Object>> list = new ArrayList();
-    ArrayList GYMIDArr = new ArrayList();
+    ArrayList gymIDArr = new ArrayList();
     ArrayList titleArr = new ArrayList();
-    ArrayList LatLngArr = new ArrayList();
+    ArrayList latLngArr = new ArrayList();
     ArrayList subtitleArr = new ArrayList();
     ArrayList image = new ArrayList();
     ArrayList gymstarArr = new ArrayList();
@@ -179,30 +179,14 @@ public class ArenaActivity extends Activity {
         db.execSQL(createTable); //建立資料表
     }
 
-    //將需要的資料塞到 List 裡面
-
-    private List<Map<String,Object>> getData2() {
-        List<Map<String, Object>> list2 = new ArrayList();
-        for(int i=0;i<titleArr.size();i++) {
-            HashMap<String,Object> item = new HashMap();
-            item.put("GYMID", GYMIDArr.get(i));
-            item.put("title", titleArr.get(i));
-            item.put("subtitle", subtitleArr.get(i));
-            item.put("image", image.get(i));
-            item.put("GymStar", gymstarArr.get(i));
-            list2.add(item);
-        }
-        return list2;
-    }
-
     // ListView 的 item click
 
     public final class MyView {
-        public TextView title;
-        public TextView subtitle;
-        public com.gc.materialdesign.views.Button bt;
-        public ImageView iv;
-        public RatingBar ratingBar;
+        TextView title;
+        TextView subtitle;
+        com.gc.materialdesign.views.Button bt;
+        ImageView iv;
+        RatingBar ratingBar;
     }
 
     // 實作一個 Adapter 繼承 BaseAdapter
@@ -213,25 +197,20 @@ public class ArenaActivity extends Activity {
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
-
         //回傳這個 List 有幾個 item
         return list.size();
 
     }
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return 0;
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         MyView myviews ;
         myviews = new MyView();
         convertView = inflater.inflate(R.layout.list_data, null);
@@ -254,7 +233,10 @@ public class ArenaActivity extends Activity {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if(urlChar[i]==32)temp="%20";
+                if(urlChar[i]==32)
+                {
+                    temp="%20";
+                }
             }
             encodeResult=encodeResult + temp;
         }
@@ -286,11 +268,11 @@ public class ArenaActivity extends Activity {
             public void onClick(View v) {
                 String tt = titleArr.get(position).toString();
                 String stt = subtitleArr.get(position).toString();
-                String gymidtt = GYMIDArr.get(position).toString();
-                String LatLng = LatLngArr.get(position).toString();
-                String PhotoUrl = image.get(position).toString();
+                String gymidtt = gymIDArr.get(position).toString();
+                String latLng = latLngArr.get(position).toString();
+                String photoUrl = image.get(position).toString();
                 Toast.makeText(ArenaActivity.this, "已成功加入收藏場館清單", Toast.LENGTH_SHORT).show();
-                create(gymidtt,tt,stt,LatLng,PhotoUrl);
+                create(gymidtt,tt,stt,latLng,photoUrl);
                 url3 = "http://52.198.27.85/overmove/Hot/"+gymidtt;
                 new Thread(new Runnable()
                 {
@@ -317,13 +299,13 @@ public class ArenaActivity extends Activity {
     }
 }
 
-    public long create(String gymidtt, String tt, String stt,String LatLng,String PhotoUrl) {
+    public long create(String gymidtt, String tt, String stt,String latLng,String photoUrl) {
         ContentValues args = new ContentValues();
         args.put("gymID", gymidtt);
         args.put("title", tt);
         args.put("subtitle", stt);
-        args.put("LatLng", LatLng);
-        args.put("PhotoUrl", PhotoUrl);
+        args.put("LatLng", latLng);
+        args.put("PhotoUrl", photoUrl);
 
         return db.insert("FavoriteListFinal", null, args);
     }
@@ -338,7 +320,6 @@ public class ArenaActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
         }
 
@@ -429,11 +410,11 @@ public class ArenaActivity extends Activity {
                         public void onClick(View v) {
                             oslist.clear();
                             gymstarlist.clear();
-                            GYMIDArr.clear();
+                            gymIDArr.clear();
                             titleArr.clear();
                             subtitleArr.clear();
                             image.clear();
-                            LatLngArr.clear();
+                            latLngArr.clear();
                             gymstarArr.clear();
                             list.clear();
                             url = skipValue;
@@ -455,7 +436,7 @@ public class ArenaActivity extends Activity {
                     String areaString = c.getString(TAG_AREA);
                     String imageurl = c.getString(TAG_PHOTO);
                     gymId = c.getString(TAG_ID);
-                    String LatLng = c.getString(TAG_LATLNG);
+                    String latLng = c.getString(TAG_LATLNG);
 
                     // Adding value HashMap key => value
 
@@ -465,16 +446,16 @@ public class ArenaActivity extends Activity {
                     map.put(TAG_AREA, areaString);
                     map.put(TAG_PHOTO, imageurl);
                     map.put(TAG_ID,gymId);
-                    map.put(TAG_LATLNG,LatLng);
+                    map.put(TAG_LATLNG,latLng);
 
 
                     oslist.add(map);
 
-                    GYMIDArr.add(oslist.get(i).get(TAG_ID));
+                    gymIDArr.add(oslist.get(i).get(TAG_ID));
                     titleArr.add(oslist.get(i).get(TAG_COUNT));
                     subtitleArr.add(oslist.get(i).get(TAG_AREA));
                     image.add(oslist.get(i).get(TAG_PHOTO));
-                    LatLngArr.add(oslist.get(i).get(TAG_LATLNG));
+                    latLngArr.add(oslist.get(i).get(TAG_LATLNG));
 
                 }
 
@@ -483,9 +464,9 @@ public class ArenaActivity extends Activity {
                 throw new RuntimeException(e);
             }
             url2 = "http://52.198.27.85/overmove/AvgScore/";
-            for(int i = 0; i < GYMIDArr.size() ; i++)
+            for(int i = 0; i < gymIDArr.size() ; i++)
             {
-               url2= url2 + GYMIDArr.get(i)+"&";
+               url2= url2 + gymIDArr.get(i)+"&";
             }
             url2=url2.substring(0,url2.length()-1);
             JSONParse2 jsonparse2 = new JSONParse2();
@@ -571,7 +552,19 @@ public class ArenaActivity extends Activity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            list = getData2();
+
+            //將需要的資料塞到 List 裡面
+
+            List<Map<String, Object>> list2 = new ArrayList();
+            for(int i=0;i<titleArr.size();i++) {
+                HashMap<String,Object> item = new HashMap();
+                item.put("GYMID", gymIDArr.get(i));
+                item.put("title", titleArr.get(i));
+                item.put("subtitle", subtitleArr.get(i));
+                item.put("image", image.get(i));
+                item.put("GymStar", gymstarArr.get(i));
+                list2.add(item);
+            }
             MyAdapter adapter = new MyAdapter(ArenaActivity.this);
             lvArena.setAdapter(adapter);
         }
