@@ -134,15 +134,15 @@ public class MainSearch extends Activity {
             @Override
             public void onClick(View view) {
                                 try {
-                    EditText searchText = MainSearch.this.searchText;
+                    EditText searchingText = MainSearch.this.searchText;
                     String result = DBConnector.executeQuery("SELECT distinct Venue FROM information WHERE " +
                             "Counties LIKE '%" + countiesSelect + "%' AND (" +
-                            "Address LIKE '%" + searchText.getText().toString() + "%'" +
-                            "OR Area LIKE '%" + searchText.getText().toString() + "%' " +
-                            "OR Venue LIKE '%" + searchText.getText().toString() + "%' " +
-                            "OR Address LIKE '%" + searchText.getText().toString() + "%' " +
-                            "OR ArenaProject LIKE '%" + searchText.getText().toString() + "%'" +
-                            "OR FacilityProjects LIKE '%" + searchText.getText().toString() + "%')");
+                            "Address LIKE '%" + searchingText.getText().toString() + "%'" +
+                            "OR Area LIKE '%" + searchingText.getText().toString() + "%' " +
+                            "OR Venue LIKE '%" + searchingText.getText().toString() + "%' " +
+                            "OR Address LIKE '%" + searchingText.getText().toString() + "%' " +
+                            "OR ArenaProject LIKE '%" + searchingText.getText().toString() + "%'" +
+                            "OR FacilityProjects LIKE '%" + searchingText.getText().toString() + "%')");
 
                 /*
                     SQL 結果有多筆資料時使用JSONArray

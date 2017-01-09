@@ -50,7 +50,7 @@ public class StartActivity extends Activity {
     int totalcal;
     private ArrayAdapter<String> sportList;
     private String[] sport = {"健走","跑步","排球","棒壘球","籃球","羽毛球","桌球","網球","其他運動","游泳","健身房運動","有氧舞蹈"};
-    private String Sport;
+    private String sports;
 
     private Calendar mCalendar;
     private String str;
@@ -87,8 +87,8 @@ public class StartActivity extends Activity {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Sport = sport[position];
-                switch (Sport)
+                sports = sport[position];
+                switch (sports)
                 {
                     case "健走":
                         cal = 80;

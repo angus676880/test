@@ -2,7 +2,6 @@ package com.example.user.mainsearch;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -10,10 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by ASUS on 2016/11/27.
@@ -24,13 +21,13 @@ public class jsonParser {
 
     // constructor
     public jsonParser() {
-
+    // nothing
     }
 
     public JSONObject getJSONFromUrl(String url) {
         InputStream is ;
-        JSONObject jObj = null;
-        String json = "";
+        JSONObject jObj;
+        String json;
 
         // Making HTTP request
         try {
@@ -42,11 +39,7 @@ public class jsonParser {
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
 
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(e);
-        } catch (ClientProtocolException e) {
-            throw new IllegalArgumentException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
 
@@ -59,8 +52,7 @@ public class jsonParser {
                 sb.append(line + "\n");
             }
             is.close();
-            json = sb.toString();
-            System.out.println("JSONParser string: " + json);
+            json = sb.toString(); 
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

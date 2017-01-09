@@ -252,11 +252,12 @@ public class MapsActivity extends AppCompatActivity implements
 
                             for (int i = 0; i < 10; i++) {
 
-                                String latLng = new JSONArray(new JSONObject(mJsonText).getString
+                                String latLngJson = new JSONArray(new JSONObject(mJsonText)
+                                        .getString
                                         ("value"))
                                         .getJSONObject(i).getString("LatLng");
 
-                                String[] latLng2 = latLng.split(" ");
+                                String[] latLng2 = latLngJson.split(" ");
                                 char[] a = latLng2[0].toCharArray();
                                 char[] b = latLng2[1].toCharArray();
                                 String a2 = "";

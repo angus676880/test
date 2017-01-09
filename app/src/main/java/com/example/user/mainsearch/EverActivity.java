@@ -30,7 +30,7 @@ public class EverActivity extends Activity {
 
     private ArrayAdapter<String> monthList;
     private String[] month = {"一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"};
-    private String Month;
+    private String months;
     String selectMonth;
     private ArrayAdapter<String> yearList;
     private String[] year = {"2016","2017","2018","2019","2020"};
@@ -127,8 +127,8 @@ public class EverActivity extends Activity {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Month = month[position];
-                switch (Month)
+                months = month[position];
+                switch (months)
                 {
                     case "一月":
                         selectMonth="1";
