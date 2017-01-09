@@ -43,11 +43,11 @@ public class jsonParser {
             is = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         } catch (ClientProtocolException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
         try {
@@ -62,14 +62,14 @@ public class jsonParser {
             json = sb.toString();
             System.out.println("JSONParser string: " + json);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
 
@@ -79,7 +79,7 @@ public class jsonParser {
                 jObj = new JSONObject();
                 jObj.put("data", new JSONArray(json));
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj;
         }

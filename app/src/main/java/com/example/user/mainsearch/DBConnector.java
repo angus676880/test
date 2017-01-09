@@ -41,7 +41,7 @@ public class DBConnector {
             inputStream.close();
             result = builder.toString();
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
         return result;

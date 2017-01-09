@@ -195,11 +195,11 @@ public class DetailActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -213,12 +213,12 @@ public class DetailActivity extends Activity {
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj;
         }
@@ -298,11 +298,11 @@ public class DetailActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -316,12 +316,12 @@ public class DetailActivity extends Activity {
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj;
         }
@@ -354,7 +354,7 @@ public class DetailActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             ListAdapter adapter = new SimpleAdapter(
                     DetailActivity.this, comlist,

@@ -289,7 +289,7 @@ public class ArenaActivity extends Activity {
                         }
                         catch(Exception e)
                         {
-                            throw new RuntimeException(e);
+                            throw new IllegalArgumentException(e);
                         }
                     }
                 }).start();
@@ -331,7 +331,7 @@ public class ArenaActivity extends Activity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return mIcon11;
         }
@@ -367,11 +367,11 @@ public class ArenaActivity extends Activity {
                 is = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -385,12 +385,12 @@ public class ArenaActivity extends Activity {
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj;
         }
@@ -425,7 +425,7 @@ public class ArenaActivity extends Activity {
 
                 }
                 catch(JSONException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalArgumentException(e);
                 };
 
                 for(int i = 0; i < value.length(); i++){
@@ -461,7 +461,7 @@ public class ArenaActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             url2 = "http://52.198.27.85/overmove/AvgScore/";
             for(int i = 0; i < gymIDArr.size() ; i++)
@@ -497,11 +497,11 @@ public class ArenaActivity extends Activity {
                 is2 = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -515,12 +515,12 @@ public class ArenaActivity extends Activity {
                 is2.close();
                 json2 = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj2 = new JSONObject(json2);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj2;
         }
@@ -550,7 +550,7 @@ public class ArenaActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             //將需要的資料塞到 List 裡面

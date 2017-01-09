@@ -182,7 +182,7 @@ public class Camera extends Activity {
                         }
                         catch(Exception e)
                         {
-                            throw new RuntimeException(e);
+                            throw new IllegalArgumentException(e);
                         }
                     }
                 }).start();
@@ -224,7 +224,7 @@ public class Camera extends Activity {
             }
             catch (FileNotFoundException e)
             {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
         }
 
@@ -317,7 +317,7 @@ public class Camera extends Activity {
                     throw new IOException("不能登入到FTP伺服器:'" + InetAddress.getByName(ftpHost) + "'");
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -349,7 +349,7 @@ public class Camera extends Activity {
                         Toast.makeText(this, "回報圖片上傳成功!!", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalArgumentException(e);
                 }finally {
                     if(buffIn != null){
                     buffIn.close();
@@ -360,7 +360,7 @@ public class Camera extends Activity {
                 ftpClient.disconnect();
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             photoUrl = "http://fs.mis.kuas.edu.tw/~s1102137127/test/"+filename;
         }else {
@@ -401,14 +401,13 @@ public class Camera extends Activity {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap mIcon11;
             try {
 
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                throw new IllegalArgumentException(e);
             }
             return mIcon11;
         }

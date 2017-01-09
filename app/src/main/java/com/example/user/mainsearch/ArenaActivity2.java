@@ -290,7 +290,7 @@ public class ArenaActivity2 extends Activity {
                             }
                             catch(Exception e)
                             {
-                                throw new RuntimeException(e);
+                                throw new IllegalArgumentException(e);
                             }
                         }
                     }).start();
@@ -332,7 +332,7 @@ public class ArenaActivity2 extends Activity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return mIcon11;
         }
@@ -411,7 +411,7 @@ public class ArenaActivity2 extends Activity {
 
 
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        throw new IllegalArgumentException(e);
                     }
 
             }
@@ -450,11 +450,11 @@ public class ArenaActivity2 extends Activity {
                 is2 = httpEntity.getContent();
 
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -468,12 +468,12 @@ public class ArenaActivity2 extends Activity {
                 is2.close();
                 json2 = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj2 = new JSONObject(json2);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj2;
         }
@@ -521,7 +521,7 @@ public class ArenaActivity2 extends Activity {
                     }
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
         }

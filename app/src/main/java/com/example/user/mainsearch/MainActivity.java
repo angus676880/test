@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
                     try {
                         temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
                     } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
+                        throw new IllegalArgumentException(e);
                     }
                     if(urlChar[i]==32)temp="%20";
                 }
@@ -242,7 +242,7 @@ public class MainActivity extends Activity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return mIcon11;
         }
@@ -274,11 +274,11 @@ public class MainActivity extends Activity {
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (ClientProtocolException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             try {
@@ -292,12 +292,12 @@ public class MainActivity extends Activity {
                 is.close();
                 json = sb.toString();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 jObj = new JSONObject(json);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return jObj;
         }
@@ -323,7 +323,7 @@ public class MainActivity extends Activity {
                     gymidArr.add(toplist.get(i).get(TAG_GYMID));
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             url1 = "http://iplay.sa.gov.tw/odata/Gym(" + gymidArr.get(0) + ")?$format=application/json;odata.metadata=none";
             url2 = "http://iplay.sa.gov.tw/odata/Gym(" + gymidArr.get(1) + ")?$format=application/json;odata.metadata=none";
@@ -377,7 +377,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 // Getting JSON Array from URL
@@ -405,7 +405,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             try {
                 // Getting JSON Array from URL
@@ -433,7 +433,7 @@ public class MainActivity extends Activity {
 
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
 
             List<Map<String, Object>> list2 = new ArrayList();

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -170,8 +168,7 @@ public class MainSearch extends Activity {
                         finish();
 
                 } catch (Exception e) {
-                    Toast.makeText(MainSearch.this, "查無資料", Toast.LENGTH_SHORT).show();
-                    Log.e("log_tag", e.toString());
+                        throw new IllegalArgumentException(e);
                 }
             }
         });

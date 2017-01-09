@@ -311,7 +311,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                     } while (nextLink != "" && nextLink != null);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalArgumentException(e);
                 }
             }
         }).start();
@@ -520,8 +520,8 @@ public class MapsActivity extends AppCompatActivity implements
                 {
                     try {
                         temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e);
                     }
                     if(urlChar[i]==32)
                     {

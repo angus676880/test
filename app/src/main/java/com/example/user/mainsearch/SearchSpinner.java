@@ -327,7 +327,7 @@ public class SearchSpinner extends Activity {
                 HttpResponse response = new DefaultHttpClient().execute(myPost);
                 in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             String result="";
 
@@ -338,7 +338,7 @@ public class SearchSpinner extends Activity {
                     result+=line;
                 }
             }catch(Exception e){
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             // parse json data
             try{
@@ -350,7 +350,7 @@ public class SearchSpinner extends Activity {
                 }
             }
             catch(JSONException e){
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException(e);
             }
             return null;
         }

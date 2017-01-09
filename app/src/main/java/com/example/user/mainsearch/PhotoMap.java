@@ -221,8 +221,8 @@ public class PhotoMap extends AppCompatActivity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         try {
             setUpMap();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
     }
     @Override
@@ -303,14 +303,14 @@ public class PhotoMap extends AppCompatActivity implements
             photoLat = Double.parseDouble(url[2]);
             photoLng = Double.parseDouble(url[3]);
 
-            Bitmap bmImg = null;
+            Bitmap bmImg;
             try {
                 // Download Image from URL
                 InputStream input = new URL(photoImageURL).openStream();
                 // Decode Bitmap
                 bmImg = BitmapFactory.decodeStream(input);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e);
             }
             return bmImg;
     }
