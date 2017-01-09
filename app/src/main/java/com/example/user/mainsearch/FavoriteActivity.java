@@ -28,7 +28,7 @@ public class FavoriteActivity extends Activity {
     SQLiteDatabase db= null;
     Cursor cursor;  //和TABLE溝通
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
+    String createTable = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
 
@@ -46,7 +46,7 @@ public class FavoriteActivity extends Activity {
         btnEver = (ImageButton)findViewById(R.id.btnEver);
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
         cursor = getAll(); //查詢所有資料
         UpdataAdapter(cursor);  //載入資料表至listview
         listView2.setOnItemClickListener(new ListClickHandler());
@@ -155,9 +155,6 @@ public class FavoriteActivity extends Activity {
     }
 
     public Cursor getAll(){
-        Cursor cursor = db.rawQuery("SELECT _id, gymID, title, subtitle FROM FavoriteListFinal",null);
-
-        return cursor;
-
+        return db.rawQuery("SELECT _id, gymID, title, subtitle FROM FavoriteListFinal",null);
     }
 }

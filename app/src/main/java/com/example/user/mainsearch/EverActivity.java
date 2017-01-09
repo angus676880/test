@@ -31,15 +31,15 @@ public class EverActivity extends Activity {
     private ArrayAdapter<String> monthList;
     private String[] month = {"一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"};
     private String Month;
-    String SelectMonth;
-    private ArrayAdapter<String> YearList;
+    String selectMonth;
+    private ArrayAdapter<String> yearList;
     private String[] year = {"2016","2017","2018","2019","2020"};
-    private String SelectYear;
+    private String selectYear;
 
     SQLiteDatabase db= null;
     Cursor cursor;  //和TABLE溝通
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
+    String createTable = "CREATE TABLE if not exists EverListFinal"+"(_id INTEGER PRIMARY KEY " +
             "autoincrement,Name TEXT,Start TEXT,End TEXT,Total TEXT,Month TEXT,Day TEXT,Year " +
             "TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
@@ -58,7 +58,7 @@ public class EverActivity extends Activity {
         btnEver = (ImageButton)findViewById(R.id.btnEver);
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
         cursor = getAll(); //查詢所有資料
         UpdataAdapter(cursor);  //載入資料表至listview
 
@@ -131,40 +131,40 @@ public class EverActivity extends Activity {
                 switch (Month)
                 {
                     case "一月":
-                        SelectMonth="1";
+                        selectMonth="1";
                         break;
                     case "二月":
-                        SelectMonth="2";
+                        selectMonth="2";
                         break;
                     case "三月":
-                        SelectMonth="3";
+                        selectMonth="3";
                         break;
                     case "四月":
-                        SelectMonth="4";
+                        selectMonth="4";
                         break;
                     case "五月":
-                        SelectMonth="5";
+                        selectMonth="5";
                         break;
                     case "六月":
-                        SelectMonth="6";
+                        selectMonth="6";
                         break;
                     case "七月":
-                        SelectMonth="7";
+                        selectMonth="7";
                         break;
                     case "八月":
-                        SelectMonth="8";
+                        selectMonth="8";
                         break;
                     case "九月":
-                        SelectMonth="9";
+                        selectMonth="9";
                         break;
                     case "十月":
-                        SelectMonth="10";
+                        selectMonth="10";
                         break;
                     case "十一月":
-                        SelectMonth="11";
+                        selectMonth="11";
                         break;
                     case "十二月":
-                        SelectMonth="12";
+                        selectMonth="12";
                         break;
                     default:
                         break;
@@ -177,13 +177,13 @@ public class EverActivity extends Activity {
             }
         });
         sp5 = (Spinner)findViewById(R.id.spinner5);
-        YearList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, year);
-        sp5.setAdapter(YearList);
+        yearList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, year);
+        sp5.setAdapter(yearList);
         sp5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                SelectYear = year[position].toString();
+                selectYear = year[position];
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -209,8 +209,8 @@ public class EverActivity extends Activity {
 
                 Intent intent =new Intent();
                 intent.setClass(EverActivity.this, CaloriesActivity.class);
-                intent.putExtra("SelectMonth",SelectMonth);
-                intent.putExtra("SelectYear",SelectYear);
+                intent.putExtra("SelectMonth",selectMonth);
+                intent.putExtra("SelectYear",selectYear);
                 startActivity(intent);
             }
         });
@@ -228,19 +228,16 @@ public class EverActivity extends Activity {
     }
 
     public Cursor getAll(){
-        Cursor cursor = db.rawQuery("SELECT * FROM EverListFinal",null);
-        return cursor;
+        return db.rawQuery("SELECT * FROM EverListFinal",null);
     }
 
     public Cursor getans(){
         //設定查詢id
         //查詢指令
-        String[] Selectdate = {SelectMonth,SelectYear};
+        String[] selectDate = {selectMonth,selectYear};
 
         cursor = db.rawQuery("SELECT * FROM EverListFinal WHERE Month = ? AND Year = ?",
-                Selectdate);
-
-
+                selectDate);
         return cursor;
     }
 }

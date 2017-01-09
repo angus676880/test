@@ -1,7 +1,6 @@
 
 package com.example.user.mainsearch;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -65,30 +64,30 @@ public class MapsActivity extends AppCompatActivity implements
     ImageButton btnSpinner;
     ImageButton btnFavorite;
     ImageButton btnEver;
-    public  ArrayList LATList = new ArrayList();
-    public  ArrayList LNGList = new ArrayList();
-    public  ArrayList NAMEList = new ArrayList();
-    public  ArrayList ADDRESSList = new ArrayList();
-    public  ArrayList PHOTOList = new ArrayList();
-    public  ArrayList GYMIDList = new ArrayList();
+    ArrayList latList = new ArrayList();
+    ArrayList lngList = new ArrayList();
+    ArrayList nameList = new ArrayList();
+    ArrayList addressList = new ArrayList();
+    ArrayList photoList = new ArrayList();
+    ArrayList gymIDList = new ArrayList();
     private Spinner spinner;
-    public String nextLink;
-    public int countlatlng=0;
-    public int countmarker=0;
-    public boolean flag=true;
+    String nextLink;
+    int countlatlng=0;
+    int countmarker=0;
+    boolean flag=true;
     private ArrayAdapter<String> lunchList;
-    public String[] lunch = {"5", "10", "20", "30"};
-    public int selectNum;
-    public int oldnum=0;
-    public String photoUrl="";
+    String[] lunch = {"5", "10", "20", "30"};
+    int selectNum;
+    int oldnum=0;
+    String photoUrl="";
     SQLiteDatabase db= null;
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
+    String createTable = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
     LatLng latLng;
     char[] urlChar;
-    public String temp;
+    String temp;
     String encodeResult="";
     GoogleMap mGoogleMap;
     SupportMapFragment mFragment;
@@ -112,7 +111,6 @@ public class MapsActivity extends AppCompatActivity implements
         btnEver = (ImageButton)findViewById(R.id.btnEver);
         mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(map);
         mFragment.getMapAsync(this);
-        Thread t;
         btnHome.setOnClickListener (new Button.OnClickListener(){
 
             @Override
@@ -171,7 +169,7 @@ public class MapsActivity extends AppCompatActivity implements
             }
         });
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE); //建立資料表
+        db.execSQL(createTable); //建立資料表
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -183,7 +181,6 @@ public class MapsActivity extends AppCompatActivity implements
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                //Toast.makeText(mContext, "你選的是"+lunch[position], Toast.LENGTH_SHORT).show();
                 selectNum = Integer.parseInt(lunch[position].trim());
 
                 flag=false;
@@ -215,10 +212,10 @@ public class MapsActivity extends AppCompatActivity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                LATList.clear();
-                LNGList.clear();
-                NAMEList.clear();
-                ADDRESSList.clear();
+                latList.clear();
+                lngList.clear();
+                nameList.clear();
+                addressList.clear();
                 countlatlng = 0;
                 countmarker = 0;
                 nextLink="";
@@ -256,12 +253,13 @@ public class MapsActivity extends AppCompatActivity implements
 
                             for (int i = 0; i < 10; i++) {
 
-                                String LatLng = new JSONArray(new JSONObject(mJsonText).getString("value"))
+                                String latLng = new JSONArray(new JSONObject(mJsonText).getString
+                                        ("value"))
                                         .getJSONObject(i).getString("LatLng");
 
-                                String[] LatLng2 = LatLng.split(" ");
-                                char[] a = LatLng2[0].toCharArray();
-                                char[] b = LatLng2[1].toCharArray();
+                                String[] latLng2 = latLng.split(" ");
+                                char[] a = latLng2[0].toCharArray();
+                                char[] b = latLng2[1].toCharArray();
                                 String a2 = "";
                                 String b2 = "";
 
@@ -275,35 +273,35 @@ public class MapsActivity extends AppCompatActivity implements
                                         b2 = b2 + b[j];
                                     }
                                 }
-                                double lat = Double.valueOf(a2.trim()).doubleValue();
-                                double lng = Double.valueOf(b2.trim()).doubleValue();
+                                double lat = Double.parseDouble(a2.trim());
+                                double lng = Double.parseDouble(b2.trim());
 
-                                final double EARTH_RADIUS = 6378137.0;
-                                double radLat1 = (lat * Math.PI / 180.0);
-                                double radLat2 = (latitude * Math.PI / 180.0);
+                                final double earthRadius = 6378137.0;
+                                double radLat1 = lat * Math.PI / 180.0;
+                                double radLat2 = latitude * Math.PI / 180.0;
                                 double adistance = radLat1 - radLat2;
                                 double bdistance = (lng - longitude) * Math.PI / 180.0;
                                 double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(adistance / 2), 2)
                                         + Math.cos(radLat1) * Math.cos(radLat2)
                                         * Math.pow(Math.sin(bdistance / 2), 2)));
-                                s = s * EARTH_RADIUS / 1000;
+                                s = s * earthRadius / 1000;
                                 if (s > selectNum) {
                                     continue;
                                 }
-                                NAMEList.add(new JSONArray(new JSONObject(mJsonText).getString("value"))
+                                nameList.add(new JSONArray(new JSONObject(mJsonText).getString("value"))
                                         .getJSONObject(i).getString("Name"));
-                                PHOTOList.add(new JSONArray(new JSONObject(mJsonText)
+                                photoList.add(new JSONArray(new JSONObject(mJsonText)
                                         .getString("value"))
                                         .getJSONObject(i).getString("Photo1"));
-                                ADDRESSList.add(new JSONArray(new JSONObject(mJsonText)
+                                addressList.add(new JSONArray(new JSONObject(mJsonText)
                                         .getString("value"))
                                         .getJSONObject(i).getString("Address"));
-                                GYMIDList.add(new JSONArray(new JSONObject(mJsonText)
+                                gymIDList.add(new JSONArray(new JSONObject(mJsonText)
                                         .getString("value"))
                                         .getJSONObject(i).getString("GymID"));
 
-                                LATList.add(lat);
-                                LNGList.add(lng);
+                                latList.add(lat);
+                                lngList.add(lng);
                                 countlatlng = countlatlng + 1;
                             }
 
@@ -451,9 +449,9 @@ public class MapsActivity extends AppCompatActivity implements
 
         if(countlatlng>countmarker) {
             for (int i =countmarker; i < countlatlng; i++) {
-                photoUrl = (String) PHOTOList.get(i);
-                setUpMap((Double) LATList.get(i), (Double) LNGList.get(i),NAMEList.get(i),
-                        ADDRESSList.get(i) + "@"+ photoUrl + "@" + GYMIDList.get(i));
+                photoUrl = (String) photoList.get(i);
+                setUpMap((Double) latList.get(i), (Double) lngList.get(i),nameList.get(i),
+                        addressList.get(i) + "@"+ photoUrl + "@" + gymIDList.get(i));
                 countmarker=countmarker+1;
             }
         }
@@ -494,7 +492,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         private MapsActivity context;
-        boolean not_first_time_showing_info_window;
+        boolean notFirstTimeShowingInfoWindow;
         public CustomInfoWindowAdapter(MapsActivity context){
             this.context = context;
         }
@@ -525,14 +523,17 @@ public class MapsActivity extends AppCompatActivity implements
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    if(urlChar[i]==32)temp="%20";
+                    if(urlChar[i]==32)
+                    {
+                        temp="%20";
+                    }
                 }
                 encodeResult=encodeResult + temp;
             }
-            if (not_first_time_showing_info_window) {
+            if (notFirstTimeShowingInfoWindow) {
                 Picasso.with(MapsActivity.this).load(encodeResult).into(imageUrl);
             } else { // if it's the first time, load the image with the callback set
-                not_first_time_showing_info_window=true;
+                notFirstTimeShowingInfoWindow=true;
                 Picasso.with(MapsActivity.this).load(encodeResult).into(imageUrl,new InfoWindowRefresher(marker));
             }
             return view;
@@ -554,18 +555,9 @@ public class MapsActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onError() {}
+        public void onError() {
+            //???
+        }
     }
-    public long create(String gymidtt, String tt, String stt,String LatLng,String PhotoUrl) {
-        ContentValues args = new ContentValues();
-        args.put("gymID", gymidtt);
-        args.put("title", tt);
-        args.put("subtitle", stt);
-        args.put("LatLng", LatLng);
-        args.put("PhotoUrl", PhotoUrl);
-
-        return db.insert("FavoriteListFinal", null, args);
-    }
-
 }
 

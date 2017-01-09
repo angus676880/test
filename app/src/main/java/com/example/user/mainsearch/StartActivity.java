@@ -2,7 +2,6 @@ package com.example.user.mainsearch;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,35 +23,43 @@ public class StartActivity extends Activity {
 
     String ansid;
     Integer getid;
-    TextView title,subtitle,tvStart,tvEnd;
-    String gymid,LatLng,PhotoUrl;
-    com.gc.materialdesign.views.Button btnStart,btnEnd,btnFinish,btnDel;
+    TextView title;
+    TextView subtitle;
+    TextView tvStart;
+    TextView tvEnd;
+    String gymid;
+    String latLng;
+    String photoUrl;
+    com.gc.materialdesign.views.Button btnStart;
+    com.gc.materialdesign.views.Button btnEnd;
+    com.gc.materialdesign.views.Button btnFinish;
+    com.gc.materialdesign.views.Button btnDel;
     Spinner sp3;
-    public String sh;
-    public String sm;
-    public String eh;
-    public String em;
-    public String month;
-    public String day;
-    public String year;
-    public int shh,smm,ehh,emm;
-    public int cal;
-    public int totalcal;
-
+    String sh;
+    String sm;
+    String eh;
+    String em;
+    String month;
+    String day;
+    String year;
+    int shh;
+    int smm;
+    int ehh;
+    int emm;
+    int cal;
+    int totalcal;
     private ArrayAdapter<String> sportList;
-    private Context mContext;
     private String[] sport = {"健走","跑步","排球","棒壘球","籃球","羽毛球","桌球","網球","其他運動","游泳","健身房運動","有氧舞蹈"};
     private String Sport;
 
     private Calendar mCalendar;
     private String str;
     private SimpleDateFormat df;
-    private long startTime;
     private Handler handler = new Handler();
     SQLiteDatabase db= null;
     Cursor cursor;  //和TABLE溝通
     //SQL語法
-    String CREATE_TABLE = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
+    String createTable = "CREATE TABLE if not exists FavoriteListFinal"+"(_id INTEGER PRIMARY " +
             "KEY autoincrement,gymID TEXT,title TEXT,subtitle TEXT,LatLng TEXT,PhotoUrl TEXT)";
 
 
@@ -71,7 +78,6 @@ public class StartActivity extends Activity {
         btnFinish.setEnabled(false);
         btnDel = (com.gc.materialdesign.views.Button) findViewById(R.id.button3);
 
-        mContext = this.getApplicationContext();
         sp3 = (Spinner)findViewById(R.id.spinner3);
 
         sportList = new ArrayAdapter(this,R.layout.spinner_layout,R.id.txt, sport);
@@ -126,6 +132,7 @@ public class StartActivity extends Activity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
+                //???
             }
         });
 
@@ -135,15 +142,15 @@ public class StartActivity extends Activity {
         getid = Integer.parseInt(ansid);
 
         db = openOrCreateDatabase("database.db",MODE_WORLD_WRITEABLE,null);
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable);
         cursor = getans();
         cursor.moveToFirst();
         showans();
         operation();
 
         gymid = cursor.getString(cursor.getColumnIndex("gymID"));
-        LatLng = cursor.getString(cursor.getColumnIndex("LatLng"));
-        PhotoUrl = cursor.getString(cursor.getColumnIndex("PhotoUrl"));
+        latLng = cursor.getString(cursor.getColumnIndex("LatLng"));
+        photoUrl = cursor.getString(cursor.getColumnIndex("PhotoUrl"));
 
         btnFinish.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -154,15 +161,15 @@ public class StartActivity extends Activity {
                 dialog.setNegativeButton("No,完成運動",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        String Name = title.getText().toString();
-                        String Start = tvStart.getText().toString();
-                        String End = tvEnd.getText().toString();
+                        String name = title.getText().toString();
+                        String start = tvStart.getText().toString();
+                        String end = tvEnd.getText().toString();
                         calories();
                         String total2 = Double.toString(totalcal);
-                        String Month = month;
-                        String Day = day;
-                        String Year = year;
-                        create(Name,Start,End,total2,Month,Day,Year,LatLng,PhotoUrl);
+                        String month2 = month;
+                        String day2 = day;
+                        String year2 = year;
+                        create(name,start,end,total2,month2,day2,year2,latLng,photoUrl);
                         dbdelete(getid);
                         Intent intent = new Intent(StartActivity.this, EverActivity.class);
                         startActivity(intent);
@@ -172,27 +179,27 @@ public class StartActivity extends Activity {
                 dialog.setPositiveButton("Yes,我要評論",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        String Name = title.getText().toString();
-                        String Start = tvStart.getText().toString();
-                        String End = tvEnd.getText().toString();
+                        String name = title.getText().toString();
+                        String start = tvStart.getText().toString();
+                        String end = tvEnd.getText().toString();
                         calories();
                         String total2 = Double.toString(totalcal);
-                        String Month = month;
-                        String Day = day;
-                        String Year = year;
+                        String month2 = month;
+                        String day2 = day;
+                        String year2 = year;
                         dbdelete(getid);
                         Intent intent =new Intent();
                         intent.setClass(StartActivity.this, Camera.class);
                         intent.putExtra("gymid",gymid);
-                        intent.putExtra("LatLng",LatLng);
-                        intent.putExtra("Name",Name);
-                        intent.putExtra("Start",Start);
-                        intent.putExtra("End",End);
+                        intent.putExtra("LatLng",latLng);
+                        intent.putExtra("Name",name);
+                        intent.putExtra("Start",start);
+                        intent.putExtra("End",end);
                         intent.putExtra("Total",total2);
-                        intent.putExtra("Month",Month);
-                        intent.putExtra("Day",Day);
-                        intent.putExtra("Year",Year);
-                        intent.putExtra("PhotoUrl",PhotoUrl);
+                        intent.putExtra("Month",month2);
+                        intent.putExtra("Day",day2);
+                        intent.putExtra("Year",year2);
+                        intent.putExtra("PhotoUrl",photoUrl);
                         startActivity(intent);
                         finish();
                     }
@@ -239,14 +246,13 @@ public class StartActivity extends Activity {
                 emm = Integer.parseInt(em);
             }
         });
-
-        startTime = System.currentTimeMillis(); //取得目前時間
         handler.removeCallbacks(updateTimer);//設定定時要執行的方法
         handler.postDelayed(updateTimer, 500);//設定Delay的時間
     }
 
     //固定要執行的方法
     private Runnable updateTimer = new Runnable() {
+        @Override
         public void run() {
             handler.postDelayed(this,500);
             mCalendar = Calendar.getInstance();
@@ -257,9 +263,9 @@ public class StartActivity extends Activity {
 
     public Cursor getans(){
         //設定查詢id
-        String[] Ans = {ansid};
+        String[] ans = {ansid};
         //查詢指令
-        cursor = db.rawQuery("SELECT * FROM FavoriteListFinal WHERE _id = ?",Ans);
+        cursor = db.rawQuery("SELECT * FROM FavoriteListFinal WHERE _id = ?",ans);
         return cursor;
     }
 
@@ -280,18 +286,18 @@ public class StartActivity extends Activity {
 
     }
 
-    public long create(String Name, String Start, String End, String total2, String Month ,
-                       String Day, String Year, String LatLng,String photourl) {
+    public long create(String name, String start, String end, String total2, String month ,
+                       String day, String year, String latLng,String photoUrl) {
         ContentValues args = new ContentValues();
-        args.put("Name", Name);
-        args.put("Start", Start);
-        args.put("End", End);
+        args.put("Name", name);
+        args.put("Start", start);
+        args.put("End", end);
         args.put("total", total2);
-        args.put("Month", Month);
-        args.put("Day", Day);
-        args.put("Year", Year);
-        args.put("LatLng", LatLng);
-        args.put("PhotoUrl", photourl);
+        args.put("Month", month);
+        args.put("Day", day);
+        args.put("Year", year);
+        args.put("LatLng", latLng);
+        args.put("PhotoUrl", photoUrl);
 
 
         return db.insert("EverListFinal", null, args);

@@ -333,7 +333,7 @@ public class SearchSpinner extends Activity {
 
             //convert response to string
             try{
-                String line = "";
+                String line;
                 while ((line = in.readLine()) != null) {
                     result+=line;
                 }

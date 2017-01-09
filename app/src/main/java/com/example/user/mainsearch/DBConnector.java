@@ -19,14 +19,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class DBConnector {
-    public static String executeQuery(String query_string) {
+    public static String executeQuery(String queryString) {
         String result = "";
 
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://fs.mis.kuas.edu.tw/~s1102137122/android_connect_db.php");
             ArrayList<NameValuePair> params = new ArrayList();
-            params.add(new BasicNameValuePair("query_string", query_string));
+            params.add(new BasicNameValuePair("query_string", queryString));
             httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity httpEntity = httpResponse.getEntity();

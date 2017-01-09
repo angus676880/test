@@ -44,20 +44,29 @@ import java.util.HashMap;
 
 public class DetailActivity extends Activity {
     String gymId;
-    TextView nameText, addressText, phoneText, desText, parkText;
+    TextView nameText;
+    TextView addressText;
+    TextView phoneText;
+    TextView desText;
+    TextView parkText;
     ListView lvComment;
-    ImageButton btnHome,btnKeyword,btnMap,btnSpinner,btnFavorite,btnEver;
+    ImageButton btnHome;
+    ImageButton btnKeyword;
+    ImageButton btnMap;
+    ImageButton btnSpinner;
+    ImageButton btnFavorite;
+    ImageButton btnEver;
     ArrayList<HashMap<String, String>> comlist = new ArrayList();
     private static final String TAG_COM = "data";
     private static final String TAG_GYMID = "gymid";
     private static final String TAG_SCORE = "score";
     private static final String TAG_COMMENT = "comment";
-    public InputStream is ;
-    public JSONObject jObj ;
-    public String json ;
+    InputStream is ;
+    JSONObject jObj ;
+    String json ;
     private static final String TAG_OS = "value";
-    private static final String TAG_count = "Name";
-    private static final String TAG_area = "Address";
+    private static final String TAG_COUNT = "Name";
+    private static final String TAG_AREA = "Address";
     private static final String TAG_ID = "GymID";
     private static final String TAG_PHOTO = "Photo1";
     private static final String TAG_DES = "Description";
@@ -225,9 +234,9 @@ public class DetailActivity extends Activity {
                     JSONObject c = value.getJSONObject(i);
 
                     // Storing  JSON item in a Variable
-                    String ecountiesString = c.getString(TAG_count);
-                    String areaString = c.getString(TAG_area);
-                    final String MapAddress = areaString;
+                    String ecountiesString = c.getString(TAG_COUNT);
+                    String areaString = c.getString(TAG_AREA);
+                    final String mapAddress = areaString;
                     String photo1 = c.getString(TAG_PHOTO);
                     String phone = c.getString(TAG_PHONE);
                     String des = c.getString(TAG_DES);
@@ -242,7 +251,7 @@ public class DetailActivity extends Activity {
                     addressText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+MapAddress);
+                            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+mapAddress);
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             startActivity(mapIntent);
@@ -252,7 +261,6 @@ public class DetailActivity extends Activity {
 
                         @Override
                         public void onClick(View arg0) {
-                            // TODO Auto-generated method stub
                             String phone = phoneText.getText().toString().replaceAll("-", "");
                             Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
                                     "tel", phone, null));
@@ -329,17 +337,17 @@ public class DetailActivity extends Activity {
                     JSONObject c = value.getJSONObject(i);
 
                     // Storing  JSON item in a Variable
-                    String GymidString = c.getString(TAG_GYMID);
-                    String ScoreString = c.getString(TAG_SCORE);
-                    String CommentString = c.getString(TAG_COMMENT);
+                    String gymIDString = c.getString(TAG_GYMID);
+                    String scoreString = c.getString(TAG_SCORE);
+                    String commentString = c.getString(TAG_COMMENT);
 
                     // Adding value HashMap key => value
 
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_GYMID, GymidString);
-                    map.put(TAG_SCORE, ScoreString);
-                    map.put(TAG_COMMENT, CommentString);
+                    map.put(TAG_GYMID, gymIDString);
+                    map.put(TAG_SCORE, scoreString);
+                    map.put(TAG_COMMENT, commentString);
 
                     comlist.add(map);
                 }

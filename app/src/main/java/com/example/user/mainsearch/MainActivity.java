@@ -47,17 +47,17 @@ public class MainActivity extends Activity {
     ImageButton btnFavorite;
     ImageButton btnEver;
     ListView lv3;
-    public InputStream is = null;
-    public JSONObject jObj = null;
-    public String json = "";
+    InputStream is = null;
+    JSONObject jObj = null;
+    String json = "";
     ArrayList<HashMap<String, String>> toplist = new ArrayList();
-    private static final String TAG_top = "data";
-    private static final String TAG_gymid = "gymid";
+    private static final String TAG_TOP = "data";
+    private static final String TAG_GYMID = "gymid";
     ArrayList<HashMap<String, String>> infolist = new ArrayList();
     private static final String TAG_COM = "value";
-    private static final String TAG_Name = "Name";
-    private static final String TAG_Address = "Address";
-    private static final String TAG_Image = "Photo1";
+    private static final String TAG_NAME = "Name";
+    private static final String TAG_ADDRESS = "Address";
+    private static final String TAG_IMAGE = "Photo1";
     List<Map<String, Object>> list = new ArrayList();
     String encodeResult="";
     char[] urlChar;
@@ -65,15 +65,15 @@ public class MainActivity extends Activity {
     JSONArray value2 = null;
     JSONArray value3 = null;
     JSONArray value4 = null;
-    public String temp;
+    String temp;
     String url;
     String url1;
     String url2;
     String url3;
-    public ArrayList gymidArr = new ArrayList();
-    public ArrayList nameArr = new ArrayList();
-    public ArrayList addressArr = new ArrayList();
-    public ArrayList imageArr = new ArrayList();
+    ArrayList gymidArr = new ArrayList();
+    ArrayList nameArr = new ArrayList();
+    ArrayList addressArr = new ArrayList();
+    ArrayList imageArr = new ArrayList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,23 +152,11 @@ public class MainActivity extends Activity {
 
 
     }
-    private List<Map<String,Object>> getData() {
-        List<Map<String, Object>> list2 = new ArrayList();
-        for(int i=0;i<gymidArr.size();i++) {
-            HashMap<String,Object> item = new HashMap();
-            item.put("nameArr", nameArr.get(i));
-            item.put("addressArr", addressArr.get(i));
-            item.put("gymidArr", gymidArr.get(i));
-            item.put("imageArr", imageArr.get(i));
-            list2.add(item);
-        }
-        return list2;
-    }
     public final class MyView {
-        public TextView tvHomeName;
-        public TextView tvHomeAddress;
-        public TextView tvHomeID;
-        public ImageView iv;
+        TextView tvHomeName;
+        TextView tvHomeAddress;
+        TextView tvHomeID;
+        ImageView iv;
     }
     public class MyAdapter extends BaseAdapter {
         private LayoutInflater inflater;
@@ -319,20 +307,20 @@ public class MainActivity extends Activity {
             pDialog.dismiss();
             try {
                 // Getting JSON Array from URL
-                value = json.getJSONArray(TAG_top);
+                value = json.getJSONArray(TAG_TOP);
 
                 for(int i = 0; i < value.length(); i++){
                     JSONObject c = value.getJSONObject(i);
                     // Storing  JSON item in a Variable
-                    String gymidString = c.getString(TAG_gymid);
+                    String gymidString = c.getString(TAG_GYMID);
                     // Adding value HashMap key => value
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_gymid, gymidString);
+                    map.put(TAG_GYMID, gymidString);
 
                     toplist.add(map);
 
-                    gymidArr.add(toplist.get(i).get(TAG_gymid));
+                    gymidArr.add(toplist.get(i).get(TAG_GYMID));
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -370,20 +358,20 @@ public class MainActivity extends Activity {
                 for(int i = 0; i < value2.length(); i++){
                     JSONObject c = value2.getJSONObject(i);
                     // Storing  JSON item in a Variable
-                    String nameString = c.getString(TAG_Name);
-                    String addressString = c.getString(TAG_Address);
-                    String imageString = c.getString(TAG_Image);
+                    String nameString = c.getString(TAG_NAME);
+                    String addressString = c.getString(TAG_ADDRESS);
+                    String imageString = c.getString(TAG_IMAGE);
 
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_Name, nameString);
-                    map.put(TAG_Address, addressString);
-                    map.put(TAG_Image, imageString);
+                    map.put(TAG_NAME, nameString);
+                    map.put(TAG_ADDRESS, addressString);
+                    map.put(TAG_IMAGE, imageString);
                     infolist.add(map);
 
-                    nameArr.add(infolist.get(i).get(TAG_Name));
-                    addressArr.add(infolist.get(i).get(TAG_Address));
-                    imageArr.add(infolist.get(i).get(TAG_Image));
+                    nameArr.add(infolist.get(i).get(TAG_NAME));
+                    addressArr.add(infolist.get(i).get(TAG_ADDRESS));
+                    imageArr.add(infolist.get(i).get(TAG_IMAGE));
                     infolist.clear();
                 }
 
@@ -398,20 +386,20 @@ public class MainActivity extends Activity {
                 for(int i = 0; i < value3.length(); i++){
                     JSONObject c = value3.getJSONObject(i);
                     // Storing  JSON item in a Variable
-                    String nameString = c.getString(TAG_Name);
-                    String addressString = c.getString(TAG_Address);
-                    String imageString = c.getString(TAG_Image);
+                    String nameString = c.getString(TAG_NAME);
+                    String addressString = c.getString(TAG_ADDRESS);
+                    String imageString = c.getString(TAG_IMAGE);
 
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_Name, nameString);
-                    map.put(TAG_Address, addressString);
-                    map.put(TAG_Image, imageString);
+                    map.put(TAG_NAME, nameString);
+                    map.put(TAG_ADDRESS, addressString);
+                    map.put(TAG_IMAGE, imageString);
                     infolist.add(map);
 
-                    nameArr.add(infolist.get(i).get(TAG_Name));
-                    addressArr.add(infolist.get(i).get(TAG_Address));
-                    imageArr.add(infolist.get(i).get(TAG_Image));
+                    nameArr.add(infolist.get(i).get(TAG_NAME));
+                    addressArr.add(infolist.get(i).get(TAG_ADDRESS));
+                    imageArr.add(infolist.get(i).get(TAG_IMAGE));
                     infolist.clear();
                 }
 
@@ -426,20 +414,20 @@ public class MainActivity extends Activity {
                 for(int i = 0; i < value4.length(); i++){
                     JSONObject c = value4.getJSONObject(i);
                     // Storing  JSON item in a Variable
-                    String nameString = c.getString(TAG_Name);
-                    String addressString = c.getString(TAG_Address);
-                    String imageString = c.getString(TAG_Image);
+                    String nameString = c.getString(TAG_NAME);
+                    String addressString = c.getString(TAG_ADDRESS);
+                    String imageString = c.getString(TAG_IMAGE);
 
                     HashMap<String, String> map = new HashMap();
 
-                    map.put(TAG_Name, nameString);
-                    map.put(TAG_Address, addressString);
-                    map.put(TAG_Image, imageString);
+                    map.put(TAG_NAME, nameString);
+                    map.put(TAG_ADDRESS, addressString);
+                    map.put(TAG_IMAGE, imageString);
                     infolist.add(map);
 
-                    nameArr.add(infolist.get(i).get(TAG_Name));
-                    addressArr.add(infolist.get(i).get(TAG_Address));
-                    imageArr.add(infolist.get(i).get(TAG_Image));
+                    nameArr.add(infolist.get(i).get(TAG_NAME));
+                    addressArr.add(infolist.get(i).get(TAG_ADDRESS));
+                    imageArr.add(infolist.get(i).get(TAG_IMAGE));
                     infolist.clear();
                 }
 
@@ -447,13 +435,20 @@ public class MainActivity extends Activity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            list = getData();
+
+            List<Map<String, Object>> list2 = new ArrayList();
+            for(int i=0;i<gymidArr.size();i++) {
+                HashMap<String,Object> item = new HashMap();
+                item.put("nameArr", nameArr.get(i));
+                item.put("addressArr", addressArr.get(i));
+                item.put("gymidArr", gymidArr.get(i));
+                item.put("imageArr", imageArr.get(i));
+                list2.add(item);
+            }
+
             MyAdapter adapter = new MyAdapter(MainActivity.this);
             lv3.setAdapter(adapter);
 
         }
     }
-
-
-
 }

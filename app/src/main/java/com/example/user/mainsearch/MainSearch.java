@@ -33,7 +33,7 @@ public class MainSearch extends Activity {
     ImageButton btnEver;
     Spinner spinner;
 
-    public ArrayList nameArr = new ArrayList();
+    ArrayList nameArr = new ArrayList();
 
     private ArrayAdapter<String> countiesList;
     private String[] counties = {"臺北市","高雄市","基隆市","新北市","桃園市","新竹縣","新竹市","苗栗縣",
@@ -149,27 +149,18 @@ public class MainSearch extends Activity {
                 /*
                     SQL 結果有多筆資料時使用JSONArray
                     只有一筆資料時直接建立JSONObject物件
-                    JSONObject jsonData = new JSONObject(result);
                 */
 
                         JSONArray jsonArray = new JSONArray(result);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonData = jsonArray.getJSONObject(i);
 
-                            final TextView user_acc = new TextView(MainSearch.this);
-                            user_acc.setText(jsonData.getString("Venue"));
+                            final TextView userAcc = new TextView(MainSearch.this);
+                            userAcc.setText(jsonData.getString("Venue"));
 
-                            String name = user_acc.getText().toString();
+                            String name = userAcc.getText().toString();
 
                             nameArr.add(name);
-
-                            //TextView user_pwd = new TextView(MainSearch.this);
-                            //user_pwd.setText(jsonData.getString("Address"));
-                            //user_pwd.setLayoutParams(view_layout);
-
-                            //建立多執行緒進行網路Server API串接的資料傳輸與讀取
-
-
                         }
 
                         Intent intent = new Intent();
@@ -189,7 +180,7 @@ public class MainSearch extends Activity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                countiesSelect = counties[position].toString();
+                countiesSelect = counties[position];
             }
 
             @Override

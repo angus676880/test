@@ -53,11 +53,10 @@ public class PhotoMap extends AppCompatActivity implements
     ImageButton btnSpinner;
     ImageButton btnFavorite;
     ImageButton btnEver;
-    public  ArrayList uriList = new ArrayList();
-    public  ArrayList titleList = new ArrayList();
-    public  ArrayList latList = new ArrayList();
-    public  ArrayList lngList = new ArrayList();
-    private GoogleMap mMap;
+    ArrayList uriList = new ArrayList();
+    ArrayList titleList = new ArrayList();
+    ArrayList latList = new ArrayList();
+    ArrayList lngList = new ArrayList();
     SQLiteDatabase db= null;
     LatLng latLng;
     GoogleMap mGoogleMap;
@@ -287,22 +286,22 @@ public class PhotoMap extends AppCompatActivity implements
 
     // DownloadImage AsyncTask
     private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-        public String photoImageURL;
-        public String photoTitle;
-        public double photoLat;
-        public double photoLng;
+        String photoImageURL;
+        String photoTitle;
+        double photoLat;
+        double photoLng;
         @Override
         protected void onPreExecute() {
             //?????
         }
 
         @Override
-        protected Bitmap doInBackground(String... URL) {
+        protected Bitmap doInBackground(String... url) {
 
-            photoImageURL = URL[0];
-            photoTitle = URL[1];
-            photoLat = Double.parseDouble(URL[2]);
-            photoLng = Double.parseDouble(URL[3]);
+            photoImageURL = url[0];
+            photoTitle = url[1];
+            photoLat = Double.parseDouble(url[2]);
+            photoLng = Double.parseDouble(url[3]);
 
             Bitmap bmImg = null;
             try {
@@ -351,8 +350,7 @@ public class PhotoMap extends AppCompatActivity implements
         float scaleHeight = ((float) newHeight) / height;
         // 缩放图片动作
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
+        return Bitmap.createBitmap(bgimage, 0, 0, (int) width,
                 (int) height, matrix, true);
-        return bitmap;
     }
 }
