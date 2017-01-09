@@ -44,7 +44,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -226,7 +225,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                     do {
                         if(flag==false){
-                            throw new Exception("go catch");
+                            throw new IllegalArgumentException("GO CATCH");
                         }
 
                         String uri = "http://iplay.sa.gov" +

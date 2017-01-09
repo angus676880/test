@@ -91,7 +91,7 @@ public class GPSTracker extends Service implements LocationListener {
 			}
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 
 		return location;

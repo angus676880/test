@@ -128,8 +128,8 @@ public class Camera extends Activity {
             {
                 try {
                     temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
                 }
                 if(urlChar[i]==32)
                 {
@@ -299,7 +299,7 @@ public class Camera extends Activity {
 
                 //連接FTP
                 try {ftpClient.connect(InetAddress.getByName(ftpHost));}
-                catch (UnknownHostException ex) {
+                catch (Exception ex) {
                     throw new IOException("不能找到FTP服務:" + InetAddress.getByName(ftpHost) + "'");
                 }
 

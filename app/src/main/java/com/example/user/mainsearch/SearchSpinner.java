@@ -271,8 +271,8 @@ public class SearchSpinner extends Activity {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
                 is = urlConnection.getInputStream();
-            }catch(IOException e){
-                e.printStackTrace();
+            }catch(Exception e){
+                throw new IllegalArgumentException(e);
             }
 
             //convert response to string
@@ -286,7 +286,7 @@ public class SearchSpinner extends Activity {
                 is.close();
                 }
             }catch(Exception e){
-                e.printStackTrace();
+                throw new IllegalArgumentException(e);
             }
             // parse json data
             try{
@@ -297,8 +297,8 @@ public class SearchSpinner extends Activity {
                     list.add(jsonObject.getString("name"));
                 }
             }
-            catch(JSONException e){
-                e.printStackTrace();
+            catch(Exception e){
+                throw new IllegalArgumentException(e);
             }
             return null;
         }

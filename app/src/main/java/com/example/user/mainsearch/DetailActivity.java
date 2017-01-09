@@ -268,8 +268,8 @@ public class DetailActivity extends Activity {
                         }
                     });
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
             }
 
         }
