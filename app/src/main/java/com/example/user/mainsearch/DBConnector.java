@@ -18,8 +18,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-class DBConnector {
+public final class DBConnector {
 
+    private DBConnector() {
+        //not called
+    }
 
     public static String executeQuery(String queryString) {
         String result = "";
