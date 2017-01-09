@@ -231,7 +231,7 @@ public class ArenaActivity extends Activity {
                 try {
                     temp = URLEncoder.encode(String.valueOf(urlChar[i]),"utf-8");
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalArgumentException(e);
                 }
                 if(urlChar[i]==32)
                 {
